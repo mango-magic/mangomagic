@@ -1,31 +1,65 @@
-# Your AI Operations starts here.
+# Your AI Operations starts here
 
-Built by ManyMangoes. The Holy Trinity: **Data + AI + Automation**.
+Built by ManyMangoes. **Data + AI + Automation**.
 
-## 1. Give ChatGPT this folder
+Build an assistant that understands your work, follows your preferences and produces something useful. This pack includes discovery, your working profile and a rollout audit. You do not need to fill every template before starting.
 
-In the ChatGPT desktop app, create a local project named AI Operations. In its project menu choose Edit project > Add folder, select this folder, and make it primary. Start a new chat there. If your app has no local projects, use a ChatGPT project on the web, upload the relevant Markdown files and paste the operating instructions into project instructions. Web projects do not automatically read your Mac's folders.
+## 1. Open your workspace
 
-The script creates files. It does not sign into accounts, attach folders in the app, start agents, or schedule tasks.
+The default folder is `~/Documents/AI Operations`. If you chose another destination, use that folder. Add it as a local folder project in a desktop client that supports local projects, then start a new chat there. Verify access in that chat; opening a folder does not prove the assistant can read it.
 
-## 2. Paste this into that project chat
+If your client cannot access local folders, upload the relevant Markdown files to a project or chat. Include root `AGENTS.md`, the current mission, business brief, roster and the three assistant-pack files linked below. Ask for updates you can save locally. Uploaded copies do not automatically stay in sync with files on your Mac.
+
+By default, the setup script copies local files only. With `--with-mangomagic`, it also runs the MangoMagic model installer, registers the model and restarts ChatGPT unless you pass `--no-restart`. Neither mode attaches the folder to your app, signs in to services for you, launches workers or creates schedules.
+
+## 2. Paste this onboarding prompt
 
 ```text
-Set up this AI Operations workspace for my business. Read AGENTS.md, 00_Command_Centre/BUSINESS_BRIEF.md, CURRENT_MISSION.md and 02_Agents/AGENT_ROSTER.md. First verify that you can read these files; if you cannot, explain the missing access without pretending setup worked. Ask me up to five short questions together to fill material gaps in the business brief. Use facts I provide; leave unknowns marked unknown. Preserve existing content. Recommend only the roles I need. Explain which custom agents are actually available in this client and which are just role instructions. Update the business brief, mission, roster and project_tasks.json. Show one useful first deliverable and its acceptance criteria. Do not run recurring tasks or send messages as part of onboarding.
+Build my assistant in this AI Operations workspace. Read AGENTS.md,
+CURRENT_MISSION.md, 00_Command_Centre/BUSINESS_BRIEF.md,
+02_Agents/AGENT_ROSTER.md and these files in 00_Command_Centre:
+BUILD_MY_ASSISTANT.md, ASSISTANT_PROFILE.md and ASSISTANT_ROLLOUT.md.
+
+First verify what you can actually read and write in this session. Follow the
+build workflow using my existing answers, preferences and authorisation. Ask
+up to five concise questions per round, fewer when useful. Do not make me
+repeat information or approvals already supplied. Use examples of my work to
+learn tone; do not assign personality labels. Keep facts, observations,
+assumptions and gaps distinct, with sources. Preserve existing content.
+
+Personalise the assistant profile, business brief and current mission; update
+the roster and task status only where useful and supported by evidence. Build
+a register of real tasks and a portable instruction block under 1,500 words.
+Choose one useful task, define its acceptance checks, complete the authorised
+work and verify the result. Continue independent work when a gap blocks another
+step. Then aim for three real pilot tasks and a review; do not pad the register.
+
+Explain which role files are available, which custom agent definitions this
+client recognises and whether any workers actually ran. Onboarding alone does
+not authorise messages, publishing, purchases or schedules; honour any relevant
+authorisation I have already given. Finish with saved output paths, checks,
+Where I Cut Corners and the next useful action. If you cannot save files, say so
+and provide the exact updates for me to save.
 ```
 
-## 3. Add useful data
+## 3. Use the assistant pack
 
-Put a business overview, offer, ideal customer, approved examples and current priorities in 01_Data. Keep originals in source-documents, conversations in sanitised-conversations, and record their date and authority in SOURCE_REGISTER.csv. You can point to an existing private source instead of duplicating it.
+| File | What it does |
+| --- | --- |
+| [Build my assistant](00_Command_Centre/BUILD_MY_ASSISTANT.md) | Short discovery rounds, source evidence, task design and a useful first run |
+| [My assistant profile](00_Command_Centre/ASSISTANT_PROFILE.md) | Your preferences, sources, task instructions, boundaries and portable prompt |
+| [Rollout and audit](00_Command_Centre/ASSISTANT_ROLLOUT.md) | Five checks, a three-task pilot and reviews based on actual results |
 
-## 4. Give a job, then review the result
+Bring a current priority, an approved example and a relevant source if you have them. Use quick start for one result, then deeper review to understand recent and invisible work. Keep permitted originals in `01_Data/source-documents/`, sanitised conversations in `01_Data/sanitised-conversations/`, and source dates and authority in `01_Data/SOURCE_REGISTER.csv`. Linking an existing private source is fine. Keep completed profiles and private business data out of the public starter repository.
 
-Use 00_Command_Centre/TASK_BRIEF.md. Start one chat per outcome. For a new project, copy 03_Projects/project-template to a clearly named project folder. Save outputs to that project and link the reviewed deliverable from 05_Deliverables.
+## 4. Give a real job
 
-Six ready-made role folders live in 02_Agents. Matching .codex/agents files define project-scoped custom agents in supported local Codex clients. They inherit your model and access settings. Opening the folder does not launch six workers. Ask explicitly for delegation when it helps. For a role already set up in your app, keep its name and add a matching folder using 02_Agents/ROLE_TEMPLATE.md.
+Use [TASK_BRIEF](00_Command_Centre/TASK_BRIEF.md). Start a chat for a concrete outcome. For a new project, adapt `03_Projects/project-template/`; save work there and link reviewed results from `05_Deliverables/`.
 
-## 5. Automate only after one good run
+Use only the roles you need. Role folders store instructions; `.codex/agents/` holds project-local custom agent definitions for clients that support them. Verify availability in a new project chat. Neither creates a running worker by itself. Follow existing delegation authorisation; if delegation is unavailable, the lead can work sequentially with the same role instructions.
 
-Use 04_Automations/AUTOMATION_BRIEF.md, test the prompt once, then create a scheduled task in the app and confirm it appears under Scheduled. Keep the computer on and the app running for tasks that need local files. Markdown alone is not a scheduler.
+## 5. Make repetition useful
 
-[Full cheat sheet](https://mango-magic.github.io/mangomagic/) · [Official local projects](https://learn.chatgpt.com/docs/projects)
+After a successful manual run, use [AUTOMATION_BRIEF](04_Automations/AUTOMATION_BRIEF.md) for recurring work you actually want. A schedule requires your request, a supported scheduler and verified creation. A review date in a document is not a reminder. Check the first run and the availability of required local files.
+
+[Full cheat sheet](https://mango-magic.github.io/mangomagic/)

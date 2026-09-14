@@ -3,7 +3,7 @@
 This is a ManyMangoes starter, adapted to the owner's business by onboarding.
 
 ## Start here
-- Read CURRENT_MISSION.md and 00_Command_Centre/BUSINESS_BRIEF.md before work.
+- Read CURRENT_MISSION.md, 00_Command_Centre/BUSINESS_BRIEF.md and 00_Command_Centre/ASSISTANT_PROFILE.md before work. Use the profile's confirmed preferences, selected tasks and portable instructions; an unfilled template supplies no facts or permissions. Current user directions take precedence over older preferences.
 - Use 02_Agents/AGENT_ROSTER.md to choose the responsible role. Read its AGENTS.md explicitly when delegating; nested role files are not all automatically loaded from the root.
 - For a project, read its TASK_BRIEF.md and project_tasks.json. Preserve existing work.
 

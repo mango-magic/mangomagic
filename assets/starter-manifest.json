@@ -1,5 +1,5 @@
 {
-  "file_count": 38,
+  "file_count": 41,
   "sha256": {
     ".codex/agents/automation.toml": "4454f050e18e1676788139ecf97a12ed9901ee9a5b9163b3d2e38e8ee75c16fc",
     ".codex/agents/chief-of-staff.toml": "28588d9c95ebca9fc6e0be8247a213602bc37f9ab40d804c3f34de8aeb6df9af",
@@ -8,6 +8,9 @@
     ".codex/agents/research.toml": "4d23dca674e7b87f0a86c6347c9d007429cf78c8e881279eb6e8c61b87e48d45",
     ".codex/agents/sales.toml": "047554ce44aa5e0ffc663109582022d250e5af62ef4cbd20d9acb3b2feb0ed1f",
     ".gitignore": "53a4b64f54c4fe8963bdb4acf74af29e390bb967f0c21ab6f4e6ea091691ab5c",
+    "00_Command_Centre/ASSISTANT_PROFILE.md": "dcf5dd2390faf413e4fc204a850510f6529c7b149fd4239b8946c12aa8f8fe88",
+    "00_Command_Centre/ASSISTANT_ROLLOUT.md": "60ab8bf3b6c543b7749b888b46eadf3f63645422a2b6351776527ec5e5d5845f",
+    "00_Command_Centre/BUILD_MY_ASSISTANT.md": "5f7212b0b33aa79fa6f3f10db4082f884800d4092eb20bfe29d668e2e4f8061a",
     "00_Command_Centre/BUSINESS_BRIEF.md": "4ca33cf299f430246be81f2e4be283fffdc7bcec527a7c879b707b44c37c6b18",
     "00_Command_Centre/HANDOFF.md": "df4a815512891e4d85292dca5ad540d6c73b33df04e2c209989613f0475d58ec",
     "00_Command_Centre/TASK_BRIEF.md": "51e7d4ce8e87090f2288622d99b5f9ec71ebd625804cb258f5e1722ba0fc8e63",
@@ -35,9 +38,9 @@
     "04_Automations/AUTOMATION_BRIEF.md": "4c22e92dc89e515e9ee1cd90de62d21e4a7ddb5d65f198024cd6871ff0323fe4",
     "04_Automations/README.md": "03d8f776ad6f138bc6c426f5ce62d12a8d91a0ae45c90a4dac4a9321f22128e5",
     "05_Deliverables/README.md": "211b5bf170d996d87298f138462291d513b79b0a45aad3b1092642213c592699",
-    "AGENTS.md": "294f289636317b83269ef7908466693af6df57157bcf1773c7d8118c777256e2",
+    "AGENTS.md": "49da4e4d9e076ad46c9d7f96c5ee5661da8a71fae091149a9794ad116eef20a9",
     "CURRENT_MISSION.md": "6fe856f6e835e9723a330cf2eba8417a42d810ef27af37bbcf6681cf98c9e0fc",
-    "START_HERE.md": "737c0810122022180c2f6c423a8e35c0477304fd17d379d36cf665b7f7ef1060",
+    "START_HERE.md": "032e41a3b97c4c032a8b8f9f688fc3827431cfa8915dce5e91984aba84dea9a6",
     "project_tasks.json": "604e25f2cafab71cec6c166fa7fa4e2bc01dd30788021726235b41cfd1cf46eb"
   }
 }

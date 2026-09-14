@@ -4,34 +4,31 @@
 
 Use the installed files. In an ordinary cloud ChatGPT Project, upload the required documents and paste operating rules into project instructions; disk files and local agent definitions are not automatically available. If writing is unavailable, ask for labelled updates to save yourself.
 
-## 1. Onboard the existing starter
+<a id="1-onboard-the-existing-starter"></a>
 
-**Destination:** a new chat in the AI Operations project.
+## 1. Build my assistant
+
+**Destination:** a new chat in the connected AI Operations project, during setup step 3. The numbered entries on this page are prompt recipes, not installation steps.
+
+Start with [START_HERE.md](../starter/START_HERE.md) and the [Build my assistant guide](../starter/00_Command_Centre/BUILD_MY_ASSISTANT.md). Keep the resulting context in the existing [assistant profile](../starter/00_Command_Centre/ASSISTANT_PROFILE.md) and [rollout record](../starter/00_Command_Centre/ASSISTANT_ROLLOUT.md).
 
 ```text
-Adapt this existing AI Operations starter to my business:
-[Offer, buyers, current workflow, desired outcome, constraints, available
-sources and decisions I reserve for final review.]
+Build my assistant. Read START_HERE.md and
+00_Command_Centre/BUILD_MY_ASSISTANT.md first. Verify that you can read the
+required files; report missing access rather than pretending setup worked.
 
-First verify access. Read START_HERE.md, AGENTS.md, CURRENT_MISSION.md,
-project_tasks.json, 00_Command_Centre/BUSINESS_BRIEF.md and
-02_Agents/AGENT_ROSTER.md. Preserve existing content and file structure.
-Ask up to five short questions together only for material gaps; use supplied
-facts and mark unknowns. Do useful independent work while gaps remain.
+Use the existing project context, my previous answers and authorisation already
+provided; do not ask for the same approval again. Take me through the
+brief in the guide, asking only for material gaps. Preserve existing work and
+mark unknowns. Capture my preferences from examples and feedback, without
+personality labels. Use the existing assistant profile and rollout templates;
+do not create a competing folder structure or task tracker.
 
-Update the existing business brief, root mission, roster and project_tasks.json.
-Register sources in 01_Data/SOURCE_REGISTER.csv using its existing columns.
-Preserve originals in source-documents/ or reference their authorised location;
-keep working conversation extracts in sanitised-conversations/ under 01_Data.
-Use the existing TASK_BRIEF.md and HANDOFF.md in 00_Command_Centre.
-
-Read relevant 02_Agents/<role>/AGENTS.md files explicitly. Check the supplied
-.codex/agents/*.toml definitions and report which agents this client actually
-makes available. Do not assume that definitions or role folders launch workers.
-Keep existing names and recommend only useful roles. Do not create a parallel
-folder structure or task tracker. Return one useful first deliverable with
-acceptance criteria. Keep CEO final review reserved; do not send messages,
-launch recurring work or change account permissions during onboarding.
+Help me choose one useful first deliverable, agree its acceptance checks,
+produce it and test it against the available evidence. Record the result,
+limitations and next action in the existing files. Keep final review with me.
+Account connections, external actions and schedules need their actual tools
+and my authorisation; never report them active just because files exist.
 ```
 
 ## 2. Delegate one bounded outcome
@@ -47,7 +44,7 @@ If this project is new, copy 03_Projects/project-template into its named folder;
 otherwise resume its existing files. Fill its TASK_BRIEF.md and use its
 project_tasks.json for detailed tracking. Keep root tracking at workspace level.
 
-I authorise bounded delegation for this outcome. Use 3–5 relevant specialists
+I authorise bounded delegation for this outcome. Use 3-5 relevant specialists
 when useful and supported, selecting available custom names from the roster
 (e.g. mango_sales, mango_research, mango_content, mango_quality). Use fewer for
 small tasks. Verify actual availability; if unavailable, use named sequential

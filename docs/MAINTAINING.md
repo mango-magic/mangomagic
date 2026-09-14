@@ -2,7 +2,7 @@
 
 ## Files
 
-- `index.html`, `assets/site.css`, `assets/site.js`: public cheat sheet. No application backend or analytics.
+- `index.html`, `assistant.html`, `assets/site.css`, `assets/site.js`: public cheat sheet and readable assistant guide. No application backend or analytics.
 - `starter/`: public-safe source templates, including `.codex/agents` definitions.
 - `scripts/build-operations-installer.py`: embeds templates in `setup-operations.sh` for stock macOS Bash.
 - `scripts/build-starter-assets.py`: creates a deterministic ZIP and SHA-256 manifest.
@@ -21,7 +21,7 @@ node tests/test_catalog.js
 
 End users do not need Python or Git. Both build scripts are developer tools.
 
-Verify a fresh install and a rerun in a temporary destination with `--no-open`. Inspect rendered desktop and narrow-width layouts. Verify copy buttons against the actual command/prompt contents, filters, checklist persistence/reset and download links. Never run the model installer's restart path merely to test the website.
+Verify a fresh install and a rerun in a temporary destination with `--no-open`. Ensure the assistant playbook, profile and rollout files are in both the script and ZIP. Inspect rendered desktop and narrow-width layouts for both the home page and assistant guide. Verify copy buttons against the actual command/prompt contents, filters, checklist persistence/reset and download links. Never run the model installer's restart path merely to test the website.
 
 Keep model and reasoning capabilities honest. Changing instructions does not fine-tune model weights. Do not use custom marketing names as API reasoning enum values.
 

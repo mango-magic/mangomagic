@@ -31,11 +31,12 @@ main() {
 Create a local AI Operations starter folder. Existing files are preserved.
 
 Usage: /bin/bash setup-operations.sh [--destination PATH] [--no-open]
-       /bin/bash -s -- [--destination PATH] [--no-open] < downloaded-setup.sh
+                                   [--with-mangomagic [--no-restart]]
+       /bin/bash -s -- [options] < downloaded-setup.sh
 
   --destination PATH  Folder to populate (default: $HOME/Documents/AI Operations).
   --no-open           Do not open the folder in Finder.
-  --with-mangomagic   Also install MangoMagic 7.1 and register it with ChatGPT.
+  --with-mangomagic   Also install MangoMagic 7.1, register it and restart ChatGPT.
   --no-restart        With --with-mangomagic, defer the ChatGPT restart.
   --help              Show this help without making changes.
 
@@ -161,38 +162,66 @@ OPERATIONS_USAGE
         created=$((created + 1))
     }
 
-    install_mangomagic() {
+    # Keep the EXIT trap and its download variable alive in the same scope,
+    # without replacing the caller's traps or leaving cleanup until main exits.
+    install_mangomagic() (
+        local f=''
+        cleanup_download() {
+            local status=$?
+            trap - EXIT
+            if [ -n "$f" ]; then
+                if ! rm -f -- "$f"; then
+                    printf 'Cannot remove MangoMagic download: %s\n' "$f" >&2
+                    [ "$status" -ne 0 ] || status=1
+                fi
+            fi
+            exit "$status"
+        }
+        trap cleanup_download EXIT
+        trap 'exit 130' INT
+        trap 'exit 143' TERM
         command -v curl >/dev/null 2>&1 || fail 'MangoMagic setup needs curl.'
-        local f
-        f=$(mktemp) || fail 'Cannot create a temporary file.'
-        trap 'rm -f "$f"' EXIT
+        f=$(mktemp "${TMPDIR:-/tmp}/mangomagic-install.XXXXXXXX") || fail 'Cannot create a temporary file.'
         if ! curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh -o "$f"; then
             fail 'Could not download the MangoMagic installer.'
         fi
         if [ "$no_restart" -eq 1 ]; then
-            bash "$f" --no-restart || fail 'MangoMagic setup failed.'
+            /bin/bash "$f" --no-restart || fail 'MangoMagic setup failed.'
         else
-            bash "$f" || fail 'MangoMagic setup failed.'
+            /bin/bash "$f" || fail 'MangoMagic setup failed.'
         fi
-        trap - EXIT
-        rm -f -- "$f"
-    }
+    )
 
     # Validate the entire manifest before creating directories or files.
     check_directory "$destination"
 '''
 FOOTER = r'''
     if [ "$with_mangomagic" -eq 1 ]; then
-        install_mangomagic
+        if ! install_mangomagic; then
+            printf '\nWorkspace files remain available at: %s\n' "$destination" >&2
+            printf 'Open START_HERE.md to use the workspace without MangoMagic.\n' >&2
+            fail 'Combined setup incomplete. Retry with the same destination and --with-mangomagic (plus --no-restart to defer restart); existing workspace files will be preserved.'
+        fi
     fi
 
     printf '\nAI Operations folder: %s\n' "$destination"
     printf 'Created %s file(s); preserved %s existing file(s).\n' "$created" "$preserved"
     printf '\nNext steps:\n'
     printf '1. Add this folder as a local folder project in the app.\n'
-    printf '2. Open START_HERE.md and paste its onboarding prompt into a new task in that project.\n'
-    printf '3. In the new project chat, verify which project-local agent definitions the app supports.\n'
-    printf 'Setup copied local files only. No workers were launched and no schedules were created.\n'
+    printf '2. Paste this into that project chat (also works when START_HERE.md is from an earlier install):\n'
+    printf '   Build my assistant. Read 00_Command_Centre/BUILD_MY_ASSISTANT.md and follow its workflow using my existing context and authorisation.\n'
+    printf '3. Follow 00_Command_Centre/BUILD_MY_ASSISTANT.md to build your profile and check a first deliverable.\n'
+    printf '4. In the new project chat, verify which project-local agent definitions the app supports.\n'
+    if [ "$with_mangomagic" -eq 1 ]; then
+        if [ "$no_restart" -eq 1 ]; then
+            printf 'MangoMagic setup completed; ChatGPT restart pending. Quit and reopen ChatGPT before selecting MangoMagic 7.1.\n'
+        else
+            printf 'MangoMagic setup completed and ChatGPT restarted. Select MangoMagic 7.1 in the app.\n'
+        fi
+    else
+        printf 'Setup copied local files only.\n'
+    fi
+    printf 'No workers were launched and no schedules were created.\n'
     if [ "$no_open" -eq 0 ] && [ "$(uname -s)" = Darwin ] && command -v open >/dev/null 2>&1; then
         if ! open "$destination" </dev/null; then
             printf 'Could not open Finder. Open the folder above manually.\n' >&2

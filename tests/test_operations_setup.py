@@ -12,6 +12,7 @@ import select
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 
 
@@ -36,6 +37,9 @@ class OperationsSetupTests(unittest.TestCase):
         self.templates = {
             "START_HERE.md": b"# Start here\nPaste this onboarding prompt.\n",
             "AGENTS.md": b"Local project instructions.\n",
+            "00_Command_Centre/BUILD_MY_ASSISTANT.md": b"# Build My Assistant\nPaste this prompt.\n",
+            "00_Command_Centre/ASSISTANT_PROFILE.md": b"# Assistant profile\n",
+            "00_Command_Centre/ASSISTANT_ROLLOUT.md": b"# Assistant rollout\n",
             "roles/Sales Lead/README.md": b"# Sales\n",
             "roles/Sales Lead/run.sh": b"#!/bin/bash\nprintf 'hello\\n'\n",
             "roles/Finance/README.md": b"# Finance\n",
@@ -125,6 +129,7 @@ class OperationsSetupTests(unittest.TestCase):
         self.assertFalse(self.open_log.exists())
         self.assertIn("local folder project", result.stdout)
         self.assertIn("START_HERE.md", result.stdout)
+        self.assertIn("00_Command_Centre/BUILD_MY_ASSISTANT.md", result.stdout)
         self.assertIn("verify which project-local agent definitions", result.stdout)
         self.assertIn("No workers were launched", result.stdout)
 
@@ -343,21 +348,34 @@ class OperationsSetupTests(unittest.TestCase):
                     env = dict(self.env)
                     if no_color is not None:
                         env["NO_COLOR"] = no_color
-                    result = subprocess.run(
+                    process = subprocess.Popen(
                         [BASH, "--noprofile", "--norc", str(self.script), "--no-open",
                          "--destination", str(self.destination)],
-                        stdin=subprocess.DEVNULL, stdout=slave, stderr=subprocess.PIPE,
-                        env=env, cwd=self.root, timeout=10,
+                        stdin=subprocess.DEVNULL, stdout=slave, stderr=slave,
+                        env=env, cwd=self.root,
                     )
-                    self.assertEqual(0, result.returncode, result.stderr)
                     output = b""
-                    # macOS may discard queued PTY output when the last slave
-                    # closes. Drain it while our slave descriptor is still open.
-                    while select.select([master], [], [], 0.05)[0]:
-                        chunk = os.read(master, 4096)
-                        if not chunk:
-                            break
-                        output += chunk
+                    deadline = time.monotonic() + 10
+                    try:
+                        # Drain while the child is running: the terminal buffer
+                        # can fill before a longer onboarding summary finishes.
+                        while process.poll() is None:
+                            if time.monotonic() >= deadline:
+                                self.fail("TTY installer timed out: " + output.decode(errors="replace"))
+                            if select.select([master], [], [], 0.05)[0]:
+                                output += os.read(master, 4096)
+                        # Keep our slave open until queued output is read;
+                        # macOS may otherwise discard it when the child exits.
+                        while select.select([master], [], [], 0.05)[0]:
+                            chunk = os.read(master, 4096)
+                            if not chunk:
+                                break
+                            output += chunk
+                        self.assertEqual(0, process.returncode, output.decode(errors="replace"))
+                    finally:
+                        if process.poll() is None:
+                            process.kill()
+                            process.wait(timeout=5)
                     self.assertEqual(no_color is None, b"\x1b[" in output)
                     self.assertIn(b"ManyMangoes", output)
                 finally:
@@ -378,6 +396,146 @@ class OperationsSetupTests(unittest.TestCase):
         result=self.run_setup('--with-mangomagic','--unknown',default_args=False,piped=True)
         self.assert_failure(result)
         self.assertFalse((self.home/'Documents/AI Operations').exists())
+
+    def mock_model_download(self):
+        # The real model installer is never downloaded or executed. The payload
+        # records the child arguments and can fail after printing success text.
+        downloads = self.root / "model downloads ' quoted"
+        downloads.mkdir()
+        payload = self.root / "model-fixture.sh"
+        payload.write_text('''printf '%s\\n' "$#" >> "$MODEL_LOG"
+for arg in "$@"; do printf '%s\\n' "$arg" >> "$MODEL_LOG"; done
+printf 'MODEL_PAYLOAD_RAN\\n'
+printf 'MangoMagic ready (fixture claim)\\n'
+exit "${MODEL_EXIT:-0}"
+''')
+        self.mock("curl", '''[ "$#" -eq 4 ] && [ "$1" = -fsSL ] &&
+    [ "$2" = https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh ] &&
+    [ "$3" = -o ] || exit 91
+printf '%s\\n' "$4" >> "$DOWNLOAD_LOG"
+cat "$MODEL_PAYLOAD" > "$4" || exit 92
+exit "${DOWNLOAD_EXIT:-0}"
+''')
+        self.model_log = self.root / "model.log"
+        self.download_log = self.root / "download.log"
+        return dict(self.env, TMPDIR=str(downloads), MODEL_PAYLOAD=str(payload),
+                    MODEL_LOG=str(self.model_log), DOWNLOAD_LOG=str(self.download_log))
+
+    def assert_downloads_cleaned(self, env):
+        self.assertEqual([], list(Path(env["TMPDIR"]).iterdir()))
+        if self.download_log.exists():
+            for path in self.download_log.read_text().splitlines():
+                self.assertFalse(Path(path).exists(), path)
+
+    def test_combined_restart_modes_and_preserving_rerun(self):
+        env = self.mock_model_download()
+        for no_restart in (False, True):
+            with self.subTest(no_restart=no_restart):
+                args = ["--with-mangomagic"] + (["--no-restart"] if no_restart else [])
+                result = self.run_setup(*args, piped=True, env=env)
+                self.assert_success(result)
+                self.assertNotIn("local files only", result.stdout)
+                self.assertIn("START_HERE.md", result.stdout)
+                self.assertIn("00_Command_Centre/BUILD_MY_ASSISTANT.md", result.stdout)
+                if no_restart:
+                    self.assertIn("ChatGPT restart pending", result.stdout)
+                    self.assertNotIn("ChatGPT restarted", result.stdout)
+                else:
+                    self.assertIn("ChatGPT restarted", result.stdout)
+                    self.assertNotIn("restart pending", result.stdout)
+                self.assert_downloads_cleaned(env)
+                for relative in ("START_HERE.md", "00_Command_Centre/ASSISTANT_PROFILE.md"):
+                    path = self.destination / relative
+                    path.write_text("User-owned assistant preferences\n")
+                    path.chmod(0o600)
+                before = self.snapshot(self.destination)
+                rerun = self.run_setup(*args, env=env)
+                self.assert_success(rerun)
+                self.assertIn("Created 0 file(s)", rerun.stdout)
+                self.assertEqual(before, self.snapshot(self.destination))
+                self.assert_downloads_cleaned(env)
+        self.assertEqual(["0", "0", "1", "--no-restart", "1", "--no-restart"],
+                         self.model_log.read_text().splitlines())
+        self.assertEqual(self.home_before, self.snapshot(self.home))
+
+    def test_combined_failed_download_never_executes_payload_and_can_retry(self):
+        env = self.mock_model_download()
+        result = self.run_setup("--with-mangomagic", env=dict(env, DOWNLOAD_EXIT="22"))
+        self.assert_failure(result)
+        self.assertNotIn("MODEL_PAYLOAD_RAN", result.stdout)
+        self.assertFalse(self.model_log.exists())
+        self.assertIn("Could not download", result.stderr)
+        self.assertIn("Combined setup incomplete", result.stderr)
+        self.assertIn(str(self.destination), result.stderr)
+        self.assertIn("START_HERE.md", result.stderr)
+        self.assert_downloads_cleaned(env)
+        before = self.snapshot(self.destination)
+        self.assertEqual(len(self.templates), len(before))
+        retry = self.run_setup("--with-mangomagic", env=env)
+        self.assert_success(retry)
+        self.assertEqual(before, self.snapshot(self.destination))
+        self.assert_downloads_cleaned(env)
+
+    def test_combined_failed_model_install_keeps_workspace_and_can_retry(self):
+        env = self.mock_model_download()
+        # A model installer printing a readiness claim must still fail if its
+        # exit status is nonzero. Test both restart argument paths.
+        for no_restart in (False, True):
+            with self.subTest(no_restart=no_restart):
+                args = ["--with-mangomagic"] + (["--no-restart"] if no_restart else [])
+                result = self.run_setup(*args, env=dict(env, MODEL_EXIT="7"))
+                self.assert_failure(result)
+                self.assertIn("MODEL_PAYLOAD_RAN", result.stdout)
+                self.assertIn("MangoMagic ready (fixture claim)", result.stdout)
+                self.assertNotIn("MangoMagic setup completed", result.stdout)
+                self.assertIn("MangoMagic setup failed", result.stderr)
+                self.assertIn("existing workspace files will be preserved", result.stderr)
+                self.assert_downloads_cleaned(env)
+                before = self.snapshot(self.destination)
+                self.assert_success(self.run_setup(*args, env=env))
+                self.assertEqual(before, self.snapshot(self.destination))
+                self.assert_downloads_cleaned(env)
+
+    def test_combined_cleanup_preserves_callers_exit_trap(self):
+        env = self.mock_model_download()
+        hook = self.root / "caller-trap.sh"
+        hook.write_text('''if [ -z "${CALLER_HOOK_SET:-}" ]; then
+    export CALLER_HOOK_SET=1
+    trap 'printf "caller exit\\n" > "$CALLER_LOG"' EXIT
+fi
+''')
+        caller_log = self.root / "caller.log"
+        result = self.run_setup("--with-mangomagic", env=dict(
+            env, BASH_ENV=str(hook), CALLER_LOG=str(caller_log)))
+        self.assert_success(result)
+        self.assertEqual("caller exit\n", caller_log.read_text())
+        self.assert_downloads_cleaned(env)
+
+    def test_combined_cleanup_failure_cannot_report_completion(self):
+        env = self.mock_model_download()
+        real_rm = shlex.quote(shutil.which("rm", path="/usr/bin:/bin"))
+        self.mock("rm", '''case "${3:-}" in "$TMPDIR"/*) exit 8 ;; esac
+exec ''' + real_rm + ' "$@"\n')
+        result = self.run_setup("--with-mangomagic", env=env)
+        self.assert_failure(result)
+        self.assertIn("Cannot remove MangoMagic download", result.stderr)
+        self.assertNotIn("MangoMagic setup completed", result.stdout)
+
+    def test_workspace_only_never_downloads_model(self):
+        env = self.mock_model_download()
+        result = self.run_setup(env=env)
+        self.assert_success(result)
+        self.assertIn("Setup copied local files only", result.stdout)
+        self.assertFalse(self.download_log.exists())
+        self.assertFalse(self.model_log.exists())
+
+    def test_combined_workspace_failure_never_downloads_model(self):
+        env = self.mock_model_download()
+        self.destination.mkdir(parents=True)
+        (self.destination / "START_HERE.md").mkdir()
+        self.assert_failure(self.run_setup("--with-mangomagic", env=env))
+        self.assertFalse(self.download_log.exists())
+        self.assertFalse(self.model_log.exists())
 
     def test_builder_determinism_and_cli_executable_output(self):
         before = builder.render(self.starter)

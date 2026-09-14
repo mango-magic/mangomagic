@@ -28,18 +28,23 @@ class Page(HTMLParser):
 
 class StarterSite(unittest.TestCase):
     def test_copy_targets_and_local_links_resolve(self):
-        page=Page((ROOT/'index.html').read_text())
-        self.assertEqual(len(page.ids),len(set(page.ids)))
-        for target in page.targets:self.assertIn(target,page.pres);self.assertTrue(page.pres[target].strip())
-        for link in page.links:
-            u=urlsplit(link)
-            if u.scheme or u.netloc:continue
-            if not u.path:
-                if u.fragment:self.assertIn(u.fragment,page.ids)
-            else:self.assertTrue((ROOT/unquote(u.path)).is_file(),link)
+        for filename in ('index.html','assistant.html'):
+            page=Page((ROOT/filename).read_text())
+            self.assertEqual(len(page.ids),len(set(page.ids)))
+            for target in page.targets:self.assertIn(target,page.pres);self.assertTrue(page.pres[target].strip())
+            for link in page.links:
+                u=urlsplit(link)
+                if u.scheme or u.netloc:continue
+                if not u.path:
+                    if u.fragment:self.assertIn(u.fragment,page.ids)
+                else:
+                    dest=ROOT/unquote(u.path)
+                    self.assertTrue(dest.is_file(),link)
+                    if u.fragment and dest.suffix=='.html':
+                        self.assertIn(u.fragment,Page(dest.read_text()).ids,link)
     def test_documented_terminal_commands_download_before_execution(self):
         page=Page((ROOT/'index.html').read_text())
-        for key in ['setup-command','everything-command','custom-command','model-command']:
+        for key in ['setup-command','setup-command-steps','everything-command','custom-command','model-command']:
             command=page.pres[key].strip()
             self.assertIn('mktemp',command);self.assertIn(' -o "$f" && bash "$f"',command)
             result=subprocess.run(['/bin/bash','-n','-c',command],capture_output=True,text=True)
