@@ -17,11 +17,15 @@ The installer sets up Ollama, downloads MangoMagic, checks its capabilities, reg
 | Control | What it does |
 | --- | --- |
 | Image upload | Read screenshots, charts and other images alongside your question. |
-| Low thinking | Lighter thinking for faster replies. |
-| High thinking | More thinking for complex sales decisions. |
-| Max thinking | Deepest supported thinking; replies may take longer. |
+| Light (Low / Light in ChatGPT) | Lighter reasoning effort for everyday tasks. |
+| Mango (High in ChatGPT) | High reasoning effort for complex sales decisions. |
+| Super Mango (Max in ChatGPT) | Maximum reasoning effort; replies may take longer. |
 
-These are GLM's supported thinking levels. Response time varies with the task and service load. OpenAI's separate priority speed toggle is not an Ollama feature.
+Light, Mango and Super Mango are our names for GLM's low, high and max reasoning settings. They are included in the model catalogue descriptions. ChatGPT controls its native slider labels; this installer cannot rename High and Max.
+
+All three use the same GLM 5.3 Flash model and token prices. More thinking may consume more tokens and time; it does not guarantee a better answer or a fixed speed/cost difference on every question. Image input is available at every level. OpenAI's separate priority speed toggle is not an Ollama feature.
+
+As checked on 14 September 2026, [Ollama lists](https://ollama.com/pricing) GLM 5.3 Flash at US$0.15 input, US$0.03 cached input and US$0.50 output per million tokens. Ollama credits cover this usage separately from your ChatGPT subscription.
 
 MangoMagic adds ManyMangoes' direct Australian voice, buyer-led outreach, evidence discipline, objection handling and clear next actions. This is an instruction-customised model; its weights have **not** been fine-tuned on private conversations. It only has private business context that you actually provide through your app or tools.
 

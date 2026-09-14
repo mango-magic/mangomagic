@@ -5,9 +5,9 @@
 var MODEL = 'mangomagic/mangomagic-7.1';
 var BASE = 'glm-5.3-flash';
 var EFFORTS = [
-  {effort: 'low', description: 'Faster replies with lighter thinking'},
-  {effort: 'high', description: 'Deeper thinking for complex sales decisions'},
-  {effort: 'max', description: 'Maximum thinking depth; may take longer'}
+  {effort: 'low', description: 'Light: lighter reasoning effort for everyday tasks'},
+  {effort: 'high', description: 'Mango: high reasoning effort for complex sales decisions'},
+  {effort: 'max', description: 'Super Mango: maximum reasoning effort; may take longer'}
 ];
 
 function validateCapabilities(wrapper, base) {

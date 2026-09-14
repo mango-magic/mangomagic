@@ -106,7 +106,7 @@
     .details p { max-width: 39ch; }
     .model-name { overflow-wrap: anywhere; }
     .thinking-levels { margin: 10px 0 0; font-size: 0.95rem; }
-    .thinking-levels div { display: grid; grid-template-columns: 42px 1fr; gap: 14px; margin-top: 4px; }
+    .thinking-levels div { display: grid; grid-template-columns: minmax(100px, 0.35fr) 1fr; gap: 14px; margin-top: 4px; }
     .thinking-levels dt { font-style: normal; }
     .thinking-levels dd { margin: 0; }
     footer {
@@ -206,10 +206,11 @@
           <h2 id="requirements-title">Images &amp; thinking.</h2>
           <p>Upload images and choose your thinking level.</p>
           <dl class="thinking-levels">
-            <div><dt>Low</dt><dd>Aims for faster replies.</dd></div>
-            <div><dt>High</dt><dd>Deeper thinking.</dd></div>
-            <div><dt>Max</dt><dd>Deepest thinking; may take longer.</dd></div>
+            <div><dt>Light</dt><dd>Low / Light in ChatGPT. Lighter reasoning.</dd></div>
+            <div><dt>Mango</dt><dd>High in ChatGPT. More reasoning effort.</dd></div>
+            <div><dt>Super Mango</dt><dd>Max in ChatGPT. Most reasoning effort; may take longer.</dd></div>
           </dl>
+          <p>ChatGPT supplies the slider labels. All three use GLM 5.3 Flash at the same token rates; time, usage and answer quality vary by task.</p>
         </section>
       </div>
     </main>
