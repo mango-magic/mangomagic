@@ -26,7 +26,7 @@ bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.g
 
 Creates your workspace and role templates, installs MangoMagic and restarts ChatGPT. Then [connect your folder](https://mango-magic.github.io/mangomagic/guide.html#connect). Sign-in may be required.
 
-Images, tools and adjustable thinking. **Light · Mango · Super Mango** change reasoning effort on the same model.
+Images, tools and adjustable thinking. **Light · Mango · Super Mango** change reasoning effort on the same model. Super Mango uses Mango Loop for long missions: create and update `project_tasks.json`, verify each task, and continue until 99% complete. The final 1% is the user's CEO review.
 
 Agents and schedules need your app’s tools and authorisation. [Ollama usage is billed separately](https://ollama.com/pricing).
 

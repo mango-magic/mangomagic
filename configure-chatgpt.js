@@ -7,7 +7,7 @@ var BASE = 'glm-5.3-flash';
 var EFFORTS = [
   {effort: 'low', description: 'Light: lighter reasoning effort for everyday tasks'},
   {effort: 'high', description: 'Mango: high reasoning effort for complex work and decisions'},
-  {effort: 'max', description: 'Super Mango: maximum reasoning effort; may take longer'}
+  {effort: 'max', description: 'Super Mango: maximum reasoning effort and Mango Loop for long missions'}
 ];
 
 function validateCapabilities(wrapper, base) {

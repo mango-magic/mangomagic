@@ -23,7 +23,7 @@ The installer sets up Ollama, downloads MangoMagic, checks its capabilities, reg
 | Image upload | Read screenshots, charts and other images alongside your question. |
 | Light (Low / Light in ChatGPT) | Lighter reasoning effort for everyday tasks. |
 | Mango (High in ChatGPT) | High reasoning effort for complex work and decisions. |
-| Super Mango (Max in ChatGPT) | Maximum reasoning effort; replies may take longer. |
+| Super Mango (Max in ChatGPT) | Maximum reasoning effort. For long missions, use Mango Loop to create and update `project_tasks.json` until 99% complete. |
 
 Light, Mango and Super Mango are MangoMagic's three thinking choices, mapped to the supported low, high and max settings. They are included in the model catalogue descriptions. ChatGPT controls its native slider labels; this installer cannot rename High and Max.
 
