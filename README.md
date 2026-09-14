@@ -7,7 +7,7 @@ ManyMangoes' B2B Sales Intelligence model for ChatGPT.
 Copy this into Terminal:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/manymangoes/mangomagic/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh | bash
 ```
 
 That's it. Open ChatGPT → click the model selector → choose **mangomagic/mangomagic-7.1**.

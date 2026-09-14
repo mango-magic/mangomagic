@@ -1,6 +1,6 @@
 #!/bin/bash
 # MangoMagic 7.1 - One-line installer for ChatGPT Mac
-# Usage: curl -fsSL https://raw.githubusercontent.com/manymangoes/mangomagic/main/install.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh | bash
 
 set -e
 
