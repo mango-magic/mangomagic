@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F6F0E2">
+  <meta name="description" content="Set up MangoMagic 7.1 by ManyMangoes in ChatGPT with one command.">
+  <title>Set up MangoMagic 7.1 · ManyMangoes</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --gold: #F1AB1C;
+      --navy: #111527;
+      --cream: #F6F0E2;
+      --charcoal: #1A1A1A;
+      --sand: #C9B98A;
+      --display: "Playfair Display", Georgia, serif;
+      --label: "Montserrat", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--charcoal);
+      font: italic 1rem/1.55 var(--display);
+      -webkit-font-smoothing: antialiased;
+    }
+    ::selection { background: var(--gold); color: var(--navy); }
+    a { color: inherit; text-underline-offset: 0.25em; text-decoration-thickness: 1px; }
+    a:hover { text-decoration-thickness: 2px; }
+    :focus-visible { outline: 2px solid var(--navy); outline-offset: 5px; }
+    h1, h2, p, pre { margin: 0; }
+    h1, h2 { font-family: var(--display); font-weight: 400; font-style: normal; }
+    .page { width: min(100% - 64px, 980px); margin: 0 auto; }
+    .masthead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 30px 0 22px;
+      border-bottom: 1px solid var(--sand);
+    }
+    .wordmark { color: var(--navy); font: 400 1.4rem/1.2 var(--display); }
+    .eyebrow {
+      color: var(--gold);
+      font: 700 0.65rem/1.6 var(--label);
+      font-style: normal;
+    }
+    .label-word { display: inline-block; white-space: nowrap; }
+    .hero { padding: 38px 0 28px; }
+    h1 { color: var(--navy); font-size: clamp(2.75rem, 7vw, 5rem); line-height: 1.1; }
+    .lede { margin-top: 16px; font-size: clamp(1.1rem, 2.3vw, 1.3rem); }
+    .prerequisite { margin-top: 12px; font-size: 0.95rem; }
+    .installer {
+      padding: 28px 32px;
+      border-left: 6px solid var(--gold);
+      background: var(--navy);
+      color: var(--cream);
+    }
+    .installer :focus-visible { outline-color: var(--gold); }
+    .installer h2 { margin: 8px 0; font-size: 1.9rem; line-height: 1.2; }
+    .command {
+      margin: 24px 0 20px;
+      font-style: normal;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .command code {
+      font: 400 0.9rem/1.8 ui-monospace, "SFMono-Regular", Consolas, monospace;
+      user-select: all;
+      -webkit-user-select: all;
+    }
+    .copy-row { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 20px; }
+    .copy-button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      min-height: 48px;
+      min-width: 195px;
+      padding: 13px 20px;
+      border: 0;
+      border-radius: 2px;
+      background: var(--gold);
+      color: var(--navy);
+      font: 700 0.65rem/1.5 var(--label);
+      cursor: pointer;
+    }
+    .copy-button:hover { background: var(--cream); }
+    .copy-button svg { width: 17px; height: 17px; flex: none; }
+    .copy-status { flex: 1 1 220px; min-height: 1.55em; font-size: 0.9rem; }
+    .automatic { margin-top: 20px; max-width: 65ch; font-size: 0.95rem; }
+    .details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 44px;
+      margin-top: 30px;
+      padding-bottom: 28px;
+    }
+    .details h2 { margin-bottom: 10px; color: var(--navy); font-size: 1.6rem; line-height: 1.2; }
+    .details p { max-width: 39ch; }
+    .model-name { overflow-wrap: anywhere; }
+    .thinking-levels { margin: 10px 0 0; font-size: 0.95rem; }
+    .thinking-levels div { display: grid; grid-template-columns: 42px 1fr; gap: 14px; margin-top: 4px; }
+    .thinking-levels dt { font-style: normal; }
+    .thinking-levels dd { margin: 0; }
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 14px 24px;
+      padding: 21px 0 30px;
+      border-top: 1px solid var(--sand);
+      font-size: 0.9rem;
+    }
+    footer nav { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+    @media (max-width: 620px) {
+      .page { width: calc(100% - 36px); }
+      .masthead { padding-top: 24px; gap: 12px; }
+      .wordmark { font-size: 1.2rem; }
+      .hero { padding: 28px 0 24px; }
+      .installer { padding: 24px 20px; border-left-width: 4px; }
+      .installer h2 { font-size: 1.65rem; }
+      .command { margin-top: 20px; }
+      .command code { font-size: 0.8rem; }
+      .copy-row { align-items: flex-start; gap: 12px; }
+      .copy-button { width: 100%; }
+      .copy-status { flex-basis: 100%; }
+      .details { grid-template-columns: 1fr; gap: 26px; }
+      .details p { max-width: none; }
+      footer { align-items: flex-start; flex-direction: column; }
+    }
+    @media print {
+      @page { margin: 16mm; }
+      body { print-color-adjust: exact; -webkit-print-color-adjust: exact; font-size: 10pt; }
+      .page { width: 100%; }
+      .masthead { padding-top: 0; }
+      .hero { padding: 22px 0; }
+      h1 { font-size: 38pt; }
+      .installer { padding: 20px 24px; }
+      .installer, .details section, footer { break-inside: avoid; }
+      .copy-row { display: none; }
+      .details { margin-top: 22px; gap: 24px; }
+      footer { padding-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    COPY EDITING: This page is intentionally standalone, with no build step.
+    Keep setup-mangomagic.html and mangomagic-repo/index.html identical.
+    Update the marked copy and link sections here when the verified release changes.
+    The button copies the visible command below; there is no second command string.
+  -->
+  <div class="page">
+    <header class="masthead">
+      <p class="wordmark">ManyMangoes</p>
+      <p class="eyebrow" aria-label="Setup for Mac"><span class="label-word">S E T U P</span> · <span class="label-word">M A C</span></p>
+    </header>
+
+    <main>
+      <!-- EDIT: Product identity and introductory copy. -->
+      <section class="hero" aria-labelledby="page-title">
+        <h1 id="page-title">MangoMagic 7.1.</h1>
+        <p class="lede">ManyMangoes sales intelligence, in ChatGPT.</p>
+        <p class="prerequisite">Start with the <a href="https://chatgpt.com/download/" target="_blank" rel="noopener noreferrer">official ChatGPT Mac app</a> and an internet connection. <a href="https://ollama.com/pricing" target="_blank" rel="noopener noreferrer">Ollama cloud access</a> is separate from your ChatGPT subscription.</p>
+      </section>
+
+      <section class="installer" aria-labelledby="install-title">
+        <p class="eyebrow" aria-label="One command"><span class="label-word">O N E</span> · <span class="label-word">C O M M A N D</span></p>
+        <h2 id="install-title">Copy. Paste. Set up.</h2>
+        <p>Open Terminal on your Mac, paste this command and press Return.</p>
+        <!-- EDIT: Authoritative install command. Keep this as one line in the source. -->
+        <pre class="command"><code id="install-command" tabindex="0" aria-label="Setup command">curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh | bash</code></pre>
+        <div class="copy-row">
+          <button class="copy-button" id="copy-command" type="button" aria-label="Copy setup command" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <rect x="8" y="8" width="12" height="13" rx="1"></rect>
+              <path d="M16 8V3H3v13h5"></path>
+            </svg>
+            <span id="copy-label">C O P Y · C O M M A N D</span>
+          </button>
+          <p class="copy-status" id="copy-status" role="status" aria-live="polite" aria-atomic="true"></p>
+        </div>
+        <noscript><p>Select the command above and copy it into Terminal.</p></noscript>
+        <!-- EDIT: Installer behaviour, verified separately from model capabilities. -->
+        <p class="automatic">The script sets up MangoMagic 7.1 and restarts ChatGPT automatically.</p>
+      </section>
+
+      <div class="details">
+        <!-- EDIT: Final user action and verified model slug. -->
+        <section aria-labelledby="finish-title">
+          <h2 id="finish-title">One final step.</h2>
+          <p>When ChatGPT reopens, choose <span class="model-name">MangoMagic 7.1</span> in the model picker.</p>
+        </section>
+
+        <!-- EDIT: Verified image support and thinking levels. These describe thinking
+             effort, not a separate priority-speed service or guaranteed response times. -->
+        <section class="requirements" aria-labelledby="requirements-title">
+          <h2 id="requirements-title">Images &amp; thinking.</h2>
+          <p>Upload images and choose your thinking level.</p>
+          <dl class="thinking-levels">
+            <div><dt>Low</dt><dd>Aims for faster replies.</dd></div>
+            <div><dt>High</dt><dd>Deeper thinking.</dd></div>
+            <div><dt>Max</dt><dd>Deepest thinking; may take longer.</dd></div>
+          </dl>
+        </section>
+      </div>
+    </main>
+
+    <!-- EDIT: Verified release description and resource links. -->
+    <footer>
+      <p>Instruction-customised by ManyMangoes on GLM 5.3 Flash.</p>
+      <nav aria-label="MangoMagic resources">
+        <a href="https://ollama.com/mangomagic/mangomagic-7.1" target="_blank" rel="noopener noreferrer">Model on Ollama ↗</a>
+        <a href="https://github.com/mango-magic/mangomagic/blob/main/install.sh" target="_blank" rel="noopener noreferrer">Read the GitHub script ↗</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const button = document.getElementById("copy-command");
+      const label = document.getElementById("copy-label");
+      const command = document.getElementById("install-command");
+      const status = document.getElementById("copy-status");
+      const defaultLabel = label.textContent;
+      let resetTimer;
+      let copying = false;
+
+      function selectCommand() {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(command);
+        command.focus({ preventScroll: true });
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+
+      button.addEventListener("click", async () => {
+        if (copying) return;
+        copying = true;
+        window.clearTimeout(resetTimer);
+        label.textContent = defaultLabel;
+        status.textContent = "";
+        let copied = false;
+
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(command.textContent.trim());
+            copied = true;
+          }
+        } catch {
+          // A denied clipboard permission falls back to copying the visible selection.
+        }
+
+        if (!copied) {
+          try {
+            selectCommand();
+            copied = document.execCommand("copy");
+          } catch {
+            copied = false;
+          }
+        }
+
+        if (copied) {
+          label.textContent = "C O P I E D";
+          status.textContent = "Copied. Paste into Terminal and press Return.";
+          window.getSelection()?.removeAllRanges();
+          button.focus({ preventScroll: true });
+          resetTimer = window.setTimeout(() => {
+            label.textContent = defaultLabel;
+          }, 3000);
+        } else {
+          status.textContent = "Select the command above and press ⌘C to copy.";
+        }
+
+        copying = false;
+      });
+
+      button.hidden = false;
+    })();
+  </script>
+</body>
+</html>
