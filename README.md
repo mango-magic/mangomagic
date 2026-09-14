@@ -122,7 +122,9 @@ Ask for notifications when something meaningful changes, a task fails or you nee
 
 ## 6. Optional: add MangoMagic 7.1
 
-ManyMangoes' sales instructions on **GLM 5.3 Flash**, delivered through Ollama:
+**MangoMagic 7.1. Sharper outreach. Stronger follow-ups. Clearer next moves.**
+
+ManyMangoes' B2B sales intelligence, with image input and adjustable thinking. Get it into your ChatGPT workspace through Ollama:
 
 ```bash
 bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh -o "$f" && bash "$f"'

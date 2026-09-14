@@ -12,7 +12,7 @@ var EFFORTS = [
 
 function validateCapabilities(wrapper, base) {
   if (wrapper.remote_model !== BASE || !/^https:\/\/ollama\.com(?::443)?\/?$/.test(wrapper.remote_host || '')) {
-    throw new Error('Unexpected model backend. This release is verified for GLM 5.3 Flash on Ollama.');
+    throw new Error('Unexpected model backend. Pull the current MangoMagic 7.1 release and retry.');
   }
   ['vision', 'thinking', 'tools'].forEach(function (capability) {
     if ((base.capabilities || []).indexOf(capability) === -1) {
@@ -35,7 +35,7 @@ function repairCatalog(catalogue, wrapper, base) {
   if (!matches.length) throw new Error('MangoMagic is not registered. Run the installer registration step first.');
   matches.forEach(function (m) {
     m.display_name = 'MangoMagic 7.1';
-    m.description = 'ManyMangoes B2B sales intelligence. Images and adjustable thinking.';
+    m.description = 'Sharper outreach. Stronger follow-ups. By ManyMangoes. Images and adjustable thinking.';
     m.input_modalities = ['text', 'image'];
     m.supported_reasoning_levels = JSON.parse(JSON.stringify(EFFORTS));
     m.default_reasoning_level = 'low';

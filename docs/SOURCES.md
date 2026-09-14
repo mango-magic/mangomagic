@@ -8,7 +8,7 @@ Guidance checked on 14 September 2026. Features depend on client version, plan, 
 - [AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md): local Codex loads working instructions according to project scope. Explicitly read role files when delegating from the workspace root.
 - [Subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents): current local clients support project definitions in `.codex/agents/`. These files specify name, description and developer instructions. Tools, access and model settings are inherited unless overridden.
 - [Scheduled tasks](https://learn.chatgpt.com/docs/automations): test a prompt, create the actual task in the app, and verify the saved configuration and first run. Local work requires the computer and app running.
-- [GLM 5.3 Flash](https://ollama.com/library/glm-5.3-flash): optional MangoMagic backend; image input and low/high/max reasoning support.
+- [MangoMagic 7.1](https://ollama.com/mangomagic/mangomagic-7.1): image input, tools and adjustable reasoning. Implementation details and upstream provenance are recorded in [technical notes](TECHNICAL-NOTES.md).
 - [Ollama pricing](https://ollama.com/pricing): cloud usage is separate from ChatGPT subscription usage.
 
 ## What comes from the ManyMangoes workflow
