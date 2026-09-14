@@ -11,6 +11,7 @@ main() {
 
     MODEL='mangomagic/mangomagic-7.1'
     RELEASE_URL='https://raw.githubusercontent.com/mango-magic/mangomagic/main'
+    INSTALLER_VERSION='2026.09.14.2'
     CHATGPT_BUNDLE_ID='com.openai.codex'
     RESTART_CHATGPT=1
     WORK_DIR=''
@@ -123,7 +124,7 @@ USAGE
             fi
         fi
         HELPER="$WORK_DIR/configure-chatgpt.js"
-        download "$RELEASE_URL/configure-chatgpt.js" "$HELPER"
+        download "$RELEASE_URL/configure-chatgpt.js?v=$INSTALLER_VERSION" "$HELPER"
     }
 
     find_ollama() {
@@ -351,13 +352,10 @@ APPLESCRIPT
 
     # Metadata alone cannot confirm this customer's Ollama cloud entitlement.
     # One short response verifies inference, including the advertised Low setting.
-    local inference_response=''
     note 'Checking Ollama cloud access with one short test response.'
-    if inference_response=$("$OLLAMA_BIN" run "$MODEL" --think=low --hidethinking 'Reply only READY' </dev/null); then
-        if ! printf '%s' "$inference_response" | tr '[:upper:]' '[:lower:]' | grep -q 'ready'; then
-            printf '\n  Ollama replied: %s\n' "${inference_response:-<empty response>}" >&2
-            fail 'Ollama did not return READY. Check model access, sign in if prompted, then rerun.'
-        fi
+    # A language model can answer correctly without repeating a magic word.
+    # Validate a completed API response, not the wording of its answer.
+    if osascript -l JavaScript "$HELPER" smoke "$MODEL"; then
         note 'Ollama cloud access and a Low-thinking response are verified.'
     else
         fail 'Ollama could not run the model. Use "ollama signin" if authentication is requested; resolve any cloud access or usage-limit error, then rerun.' "$?"

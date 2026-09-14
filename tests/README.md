@@ -31,11 +31,11 @@ documented curl pipeline does, without making a network request. Fake interactiv
 commands deliberately read stdin to expose accidental consumption of the script.
 Other cases inject misleading success text alongside nonzero pull/registration
 statuses, graceful quit failures, quit timeouts, reopen failures, and missing
-vision. Zero-status registration cancellation and failed or unexpected inference
-replies are also rejected. `--no-restart`, unsupported platforms, and CLI
+vision. Zero-status registration cancellation and failed or incomplete inference
+responses are also rejected. Completed answers do not need a magic word. `--no-restart`, unsupported platforms, and CLI
 validation are covered.
 
-The metadata helper is mocked at its JXA `check MODEL` / `repair MODEL` boundary.
+The metadata helper is mocked at its JXA `check MODEL` / `smoke MODEL` / `repair MODEL` boundary.
 A wrapper with empty capabilities succeeds when its remote base resolves to
 verified vision/thinking/tools. A missing-vision or unresolved base makes the
 helper fail and must prevent readiness. These shell tests verify the installer's
@@ -45,3 +45,8 @@ resolution, or actual ChatGPT catalog writes.
 Each test run reads a fresh installer snapshot, so rerun after the owner finishes
 editing. No real installer download, Ollama operation, app quit, restart, or user
 configuration write occurs.
+
+The exact homepage repair command is also executed in the isolated harness,
+including a failed download that leaves a complete script on disk. It must not
+execute that failed download. Live response validation has pure fixture checks
+in `test_catalog.js`; the shell fixture only verifies the JXA contract.

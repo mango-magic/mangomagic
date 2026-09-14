@@ -33,9 +33,11 @@ h1, h2, h3 { font-weight: 400; font-style: normal; }
 h1 { font-size: clamp(52px, 5.8vw, 80px); line-height: 1.06; }
 h1 em { font-weight: 400; }
 .lede { margin-top: 23px; font-size: 19px; color: var(--charcoal); }
-.setup-actions { display: flex; gap: 25px; align-items: center; margin-top: 29px; }
+.setup-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 29px; }
 .primary { display: inline-flex; justify-content: space-between; align-items: center; gap: 35px; min-height: 56px; border: 0; padding: 15px 21px; background: var(--gold); color: var(--navy); font: 700 12px/1.5 var(--label); }
 .primary:hover { background: var(--navy); color: var(--cream); }
+.primary.repair { background: var(--navy); color: var(--cream); gap: 14px; }
+.primary.repair:hover { background: var(--gold); color: var(--navy); }
 .download { font-size: 14px; }
 .setup-note { margin-top: 15px; font-size: 12px; }
 .copy-status { min-height: 23px; margin-top: 8px; font-size: 13px; }

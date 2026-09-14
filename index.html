@@ -10,7 +10,7 @@
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/home.css">
+<link rel="stylesheet" href="assets/home.css?v=20260914-repair2">
 <script src="assets/site.js" defer></script>
 </head>
 <body>
@@ -35,7 +35,7 @@
 <p class="eyebrow" aria-label="MangoMagic 7.1">M A N G O M A G I C · 7 . 1</p>
 <h1 id="hero-title">Less setup.<br><em>More doing.</em></h1>
 <p class="lede">The business AI system for the modern worker.</p>
-<div class="setup-actions"><button type="button" class="primary" data-copy="everything-command"><span>Copy full setup</span><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg></button><a class="download" href="assets/AI-Operations-Starter.zip" download>Download kit ↓</a></div>
+<div class="setup-actions"><button type="button" class="primary" data-copy="everything-command"><span>Copy full setup</span><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg></button><button type="button" class="primary repair" data-copy="repair-command" id="repair"><span>Fix missing model</span><svg class="icon" aria-hidden="true"><use href="#i-repeat"/></svg></button></div>
 <p class="setup-note">Mac · Restarts ChatGPT · Sign-in may be needed.</p>
 <p class="copy-status" aria-live="polite"></p>
 </div>
@@ -77,6 +77,7 @@
 <section><h3>Full setup.</h3><pre id="everything-command" tabindex="0">bash -c &#x27;f=$(mktemp) || exit; trap &quot;rm -f \&quot;$f\&quot;&quot; EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/setup-operations.sh -o &quot;$f&quot; &amp;&amp; bash &quot;$f&quot; --with-mangomagic&#x27;</pre></section>
 <section><h3>Folders only.</h3><pre id="setup-command" tabindex="0">bash -c &#x27;f=$(mktemp) || exit; trap &quot;rm -f \&quot;$f\&quot;&quot; EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/setup-operations.sh -o &quot;$f&quot; &amp;&amp; bash &quot;$f&quot;&#x27;</pre></section>
 <section><h3>Model only.</h3><pre id="model-command" tabindex="0">bash -c &#x27;f=$(mktemp) || exit; trap &quot;rm -f \&quot;$f\&quot;&quot; EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh -o &quot;$f&quot; &amp;&amp; bash &quot;$f&quot;&#x27;</pre></section>
+<section><h3>Fix missing model.</h3><p>Refreshes MangoMagic, reconnects it and restarts the app. Your workspace stays in place.</p><pre id="repair-command" tabindex="0">bash -c &#x27;f=$(mktemp) || exit; trap &quot;rm -f \&quot;$f\&quot;&quot; EXIT; curl -fsSL &quot;https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh?v=20260914-repair2&quot; -o &quot;$f&quot; &amp;&amp; bash &quot;$f&quot;&#x27;</pre></section>
 <section><h3>Build my assistant.</h3><pre id="onboard-prompt" tabindex="0">Build an actually useful assistant for me in this AI Operations workspace. Read START_HERE.md, AGENTS.md and 00_Command_Centre/BUILD_MY_ASSISTANT.md. First verify that you can read the files; if access is missing, say exactly what is missing. Use the context and permissions I have already given you. Ask only for material gaps, up to five concise questions together, and follow my preferred pace. Learn from real tasks and examples of my writing. Adapt your communication to my preferences without mentioning personality types. Follow the playbook to build my profile, specific task register and reusable assistant instructions. Mark facts, assumptions and gaps honestly. Preserve existing work, update project_tasks.json, and produce one useful first deliverable with checks. Prepare three practical tasks for week one and the rollout audit. Account connections, external actions and schedules need their actual tools and my authorisation; never report them active just because files exist.</pre></section>
 <section><h3>Brief my team.</h3><pre id="team-prompt" tabindex="0">Read AGENTS.md, CURRENT_MISSION.md and project_tasks.json. Deliver [specific outcome] in 03_Projects/[project]. Use [source files] and meet [acceptance criteria] by [deadline]. If supported, delegate independent parts to up to three relevant specialists. Give each a role file to read, exact inputs, a separate output path, file scope and a definition of done. Use fewer agents when practical. If delegation is unavailable, work sequentially and say so. Integrate the work, verify it against the evidence, update the tracker and return the deliverable with any remaining decisions. Continue authorised work without unnecessary check-ins.</pre></section>
 <section><h3>Draft a document.</h3><pre id="document-prompt" tabindex="0">Read AGENTS.md, CURRENT_MISSION.md, the business brief and my assistant profile. Draft the document needed for my current task using the relevant source files and my working preferences. If the document or audience is unclear, ask one concise question. Use verified facts, show material assumptions and keep the result useful to its reader. Check figures, dates and links. Save the draft in the relevant project folder without overwriting existing work, then update project_tasks.json with its path and checks. Keep external delivery within my actual authorisation.</pre></section>
@@ -85,7 +86,7 @@
 <section><h3>Check my work.</h3><pre id="quality-prompt" tabindex="0">Review [deliverable path] against [task brief] and its cited sources. Check factual claims, calculations, links, missing requirements and whether the output is useful to its intended reader. Distinguish checks actually performed from checks still needed. Return pass, needs changes or blocked, with evidence and specific corrections. Fix routine issues within the authorised scope, recheck them and update project_tasks.json. Keep owner approval separate from technical completion. If this reviews your own work, disclose that the review is not independent.</pre></section>
 </details>
 </main>
-<footer class="wrap"><span>Data + AI + Automation.</span><a href="https://ollama.com/pricing">Ollama usage billed separately ↗</a><a href="guide.html#start">Folders only ↗</a></footer>
+<footer class="wrap"><span>Data + AI + Automation.</span><a href="assets/AI-Operations-Starter.zip" download>Download kit ↓</a><a href="https://ollama.com/pricing">Ollama usage billed separately ↗</a><a href="guide.html#start">Folders only ↗</a></footer>
 <noscript><p class="wrap">Open Commands &amp; prompts to copy manually.</p></noscript>
 </body>
 </html>

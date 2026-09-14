@@ -83,15 +83,6 @@ if TOOL == "ollama":
         if SCENARIO.get("registration_cancelled"):
             finish(stdout="Configuration cancelled.")
         finish(stdout="Ollama models added to ChatGPT.")
-    if ARGS == ["run", MODEL, "--think=low", "--hidethinking", "Reply only READY"]:
-        EVENT["phase"] = "inference"
-        if SCENARIO.get("inference_failure"):
-            finish(43, "READY", "MOCK_INFERENCE_FAILURE")
-        if SCENARIO.get("inference_bad_reply"):
-            finish(stdout="Unexpected reply")
-        if SCENARIO.get("inference_extra_reply"):
-            finish(stdout="READY. MangoMagic is available.")
-        finish(stdout="READY")
     unexpected("ollama operation")
 
 if TOOL == "curl":
@@ -103,7 +94,16 @@ if TOOL == "curl":
         finish(stdout='{"version":"0.34.1"}')
     if url in ("http://127.0.0.1:11434/api/tags", "http://localhost:11434/api/tags"):
         finish(stdout=json.dumps({"models": [{"name": MODEL + ":latest", "model": MODEL + ":latest"}]}))
-    if url.startswith("https://raw.githubusercontent.com/") and url.endswith(".js"):
+    if url.startswith("https://raw.githubusercontent.com/") and url.split("?")[0].endswith("install.sh"):
+        EVENT["phase"] = "installer_download"
+        destinations = [ARGS[i + 1] for i, arg in enumerate(ARGS[:-1]) if arg in ("-o", "--output")]
+        if len(destinations) != 1:
+            unexpected("installer download must name a temporary output file")
+        inside_root(destinations[0]).write_text((ROOT / "installer-source.sh").read_text())
+        if SCENARIO.get("installer_download_failure"):
+            finish(22, stderr="MOCK_INSTALLER_DOWNLOAD_FAILURE")
+        finish()
+    if url.startswith("https://raw.githubusercontent.com/") and url.split("?")[0].endswith(".js"):
         EVENT["phase"] = "helper_download"
         if SCENARIO.get("download_failure"):
             finish(22, stderr="MOCK_HELPER_DOWNLOAD_FAILURE")
@@ -117,14 +117,21 @@ if TOOL == "curl":
 if TOOL == "osascript":
     if "JavaScript" in ARGS:
         drain_stdin()
-        operations = [arg for arg in ARGS if arg in ("check", "repair")]
+        operations = [arg for arg in ARGS if arg in ("check", "smoke", "repair")]
         if len(ARGS) != 5 or ARGS[:2] != ["-l", "JavaScript"] or len(operations) != 1 or ARGS[-1] != MODEL:
-            unexpected("metadata helper expects check MODEL or repair MODEL")
+            unexpected("metadata helper expects check, smoke or repair MODEL")
         helper = inside_root(ARGS[2])
         if not helper.is_file():
             unexpected("metadata helper was not downloaded into the temporary environment")
         operation = operations[0]
         EVENT["phase"] = "metadata_" + operation
+        if operation == "smoke":
+            EVENT["phase"] = "inference"
+            if SCENARIO.get("inference_failure"):
+                finish(43, "Verified", "MOCK_INFERENCE_FAILURE")
+            if SCENARIO.get("inference_empty"):
+                finish(43, stderr="Ollama returned an empty or incomplete answer. Retry setup.")
+            finish(stdout="Verified: MangoMagic returned a completed answer.")
         if operation == "check":
             wrapper_caps = SCENARIO.get("wrapper_caps", [])
             base_caps = SCENARIO.get("base_caps", ["vision", "thinking", "tools"])

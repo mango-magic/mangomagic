@@ -5,11 +5,33 @@
 // the macOS run() entry point, live APIs, and user configuration are never used.
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { repairCatalog, validateCapabilities, validateRouting } = require('../configure-chatgpt.js');
+const { repairCatalog, validateCapabilities, validateRouting, validateInference } = require('../configure-chatgpt.js');
 
 const ALIAS = 'mangomagic/mangomagic-7.1';
 const CONTEXT = 1048576;
 const REQUIRED_CAPABILITIES = ['vision', 'thinking', 'tools'];
+
+test('inference accepts any completed assistant answer, including answers without READY', () => {
+  for (const model of [ALIAS, ALIAS + ':latest']) {
+    for (const content of ['READY', 'Hello! What can I help you with?', 'Hola, ¿en qué puedo ayudarte?']) {
+      assert.equal(validateInference({model, done: true, message: {role: 'assistant', content}}), true);
+    }
+  }
+});
+
+test('inference rejects errors, incomplete responses, empty answers and wrong models', () => {
+  const valid = {model: ALIAS, done: true, message: {role: 'assistant', content: 'Hello!'}};
+  const invalid = [
+    null, {}, {...valid, error: 'sign in required'}, {...valid, done: false},
+    {...valid, done: 'true'}, {...valid, model: 'other/model'},
+    {...valid, message: {role: 'user', content: 'READY'}},
+    {...valid, message: {role: 'assistant', content: ''}},
+    {...valid, message: {role: 'assistant', content: ' \n '}},
+    {...valid, message: {role: 'assistant', thinking: 'READY'}},
+    {...valid, message: {role: 'assistant', content: ['READY']}}
+  ];
+  for (const response of invalid) assert.throws(() => validateInference(response));
+});
 
 function wrapper(overrides = {}) {
   return {

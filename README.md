@@ -6,7 +6,7 @@
 
 Data + AI + Automation.
 
-[**Open setup →**](https://mango-magic.github.io/mangomagic/) · [Build my assistant](https://mango-magic.github.io/mangomagic/#context) · [Download kit](https://mango-magic.github.io/mangomagic/assets/AI-Operations-Starter.zip)
+[**Open setup →**](https://mango-magic.github.io/mangomagic/) · [Fix missing model](https://mango-magic.github.io/mangomagic/?v=20260914-repair2#repair) · [Build my assistant](https://mango-magic.github.io/mangomagic/#context) · [Download kit](https://mango-magic.github.io/mangomagic/assets/AI-Operations-Starter.zip)
 
 ## Copy. Paste. Go.
 

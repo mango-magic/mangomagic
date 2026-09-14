@@ -1,5 +1,5 @@
 // MangoMagic 7.1 - repair the supported ChatGPT model catalogue.
-// Runs on stock macOS: osascript -l JavaScript configure-chatgpt.js check|repair MODEL
+// Runs on stock macOS: osascript -l JavaScript configure-chatgpt.js check|smoke|repair MODEL
 // No UI automation, credentials, app bundle edits or additional runtime required.
 
 var MODEL = 'mangomagic/mangomagic-7.1';
@@ -63,10 +63,25 @@ function validateRouting(routing) {
   });
 }
 
+function validateInference(response) {
+  if (!response || typeof response !== 'object' || response.error) {
+    throw new Error('Ollama returned an inference error.');
+  }
+  if (response.model !== MODEL && response.model !== MODEL + ':latest') {
+    throw new Error('Ollama answered using an unexpected model.');
+  }
+  var message = response.message;
+  if (response.done !== true || !message || message.role !== 'assistant' ||
+      typeof message.content !== 'string' || !message.content.trim()) {
+    throw new Error('Ollama returned an empty or incomplete answer. Retry setup.');
+  }
+  return true;
+}
+
 function run(argv) {
   ObjC.import('Foundation');
-  if (argv.length !== 2 || ['check', 'repair'].indexOf(argv[0]) === -1 || argv[1] !== MODEL) {
-    throw new Error('Usage: configure-chatgpt.js check|repair ' + MODEL);
+  if (argv.length !== 2 || ['check', 'smoke', 'repair'].indexOf(argv[0]) === -1 || argv[1] !== MODEL) {
+    throw new Error('Usage: configure-chatgpt.js check|smoke|repair ' + MODEL);
   }
   var env = $.NSProcessInfo.processInfo.environment;
   function environment(name) { var value = env.objectForKey($(name)); return value.isNil() ? '' : ObjC.unwrap(value); }
@@ -88,22 +103,44 @@ function run(argv) {
   if (!/^http:\/\/(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/.test(host)) {
     throw new Error('This installer requires a local Ollama server (localhost).');
   }
-  function show(model) {
+  function request(endpoint, payload, timeout) {
     var task = $.NSTask.alloc.init;
     var output = $.NSPipe.pipe;
     var errors = $.NSPipe.pipe;
     task.launchPath = '/usr/bin/curl';
-    task.arguments = ['--fail', '--silent', '--show-error', '--connect-timeout', '5', '--max-time', '30',
-      '--header', 'Content-Type: application/json', '--data', JSON.stringify({model: model}), host + '/api/show'];
+    task.arguments = ['--silent', '--show-error', '--noproxy', '*', '--connect-timeout', '5', '--max-time', String(timeout),
+      '--header', 'Content-Type: application/json', '--write-out', '\n%{http_code}',
+      '--data', JSON.stringify(payload), host + endpoint];
     task.standardOutput = output;
     task.standardError = errors;
     task.launch;
     var bytes = output.fileHandleForReading.readDataToEndOfFile;
     task.waitUntilExit;
-    if (task.terminationStatus !== 0) throw new Error('Ollama could not verify ' + model + '. Check that Ollama is running and connected.');
-    var value = JSON.parse(ObjC.unwrap($.NSString.alloc.initWithDataEncoding(bytes, $.NSUTF8StringEncoding)));
-    if (value.error) throw new Error('Ollama could not verify ' + model + '.');
+    if (task.terminationStatus !== 0) throw new Error('Ollama could not complete the check. Check your connection and retry setup.');
+    var raw = ObjC.unwrap($.NSString.alloc.initWithDataEncoding(bytes, $.NSUTF8StringEncoding));
+    var split = raw.lastIndexOf('\n');
+    var status = Number(raw.slice(split + 1));
+    if (status === 401 || status === 403) {
+      throw new Error('Ollama cloud access needs attention. Run "ollama signin", complete sign-in, then retry setup.');
+    }
+    if (status === 429) throw new Error('Ollama usage limit reached. Check https://ollama.com/settings before retrying.');
+    if (status < 200 || status >= 300 || !Number.isFinite(status)) {
+      throw new Error('Ollama check failed (HTTP ' + status + '). Retry setup when the service is available.');
+    }
+    var value;
+    try { value = JSON.parse(raw.slice(0, split)); }
+    catch (_) { throw new Error('Ollama returned an invalid response. Retry setup.'); }
+    if (!value || value.error) throw new Error('Ollama returned an error. Check model access and retry setup.');
     return value;
+  }
+  function show(model) { return request('/api/show', {model: model}, 30); }
+  if (argv[0] === 'smoke') {
+    validateInference(request('/api/chat', {
+      model: MODEL, stream: false, think: 'low',
+      messages: [{role: 'user', content: 'Say hello in one short sentence.'}],
+      options: {num_predict: 512}
+    }, 60));
+    return 'Verified: MangoMagic returned a completed answer.';
   }
   var wrapper = show(MODEL);
   // The cloud FROM implementation omits discovery metadata on custom aliases.
@@ -138,4 +175,4 @@ function run(argv) {
   return 'MangoMagic 7.1 configured: images, Low / High / Max, ' + verified.context + ' token context. Restart ChatGPT to load it.';
 }
 
-if (typeof module !== 'undefined') module.exports = {validateCapabilities: validateCapabilities, repairCatalog: repairCatalog, validateRouting: validateRouting};
+if (typeof module !== 'undefined') module.exports = {validateCapabilities: validateCapabilities, repairCatalog: repairCatalog, validateRouting: validateRouting, validateInference: validateInference};

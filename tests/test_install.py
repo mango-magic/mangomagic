@@ -6,6 +6,7 @@ Run from the repository root:
 
 from dataclasses import dataclass
 import hashlib
+import html
 import json
 import os
 from pathlib import Path
@@ -73,7 +74,7 @@ class InstallerIntegrationTests(unittest.TestCase):
             if match:
                 self.fail(message + ": " + repr(match.group(0).strip()))
 
-    def run_installer(self, *args, scenario=None, piped=False):
+    def run_installer(self, *args, scenario=None, piped=False, site_command=None):
         self.assert_safe_source(self.source)
         with tempfile.TemporaryDirectory(prefix="mangomagic installer test-") as temporary:
             root = Path(temporary).resolve()
@@ -93,6 +94,10 @@ class InstallerIntegrationTests(unittest.TestCase):
                 executable = shutil.which(command, path="/usr/bin:/bin")
                 self.assertIsNotNone(executable, "Missing text utility " + command)
                 (bindir / command).symlink_to(executable)
+            if site_command:
+                (bindir / "bash").unlink()
+                (bindir / "bash").symlink_to(BASH)
+                (root / "installer-source.sh").write_text(self.source)
             clock = root / "mock-clock.sh"
             clock.write_text('sleep() { SECONDS=$((SECONDS + $1)); command sleep "$@"; }\n')
             # No inherited credentials, shell startup hooks, Ollama endpoints,
@@ -107,7 +112,9 @@ class InstallerIntegrationTests(unittest.TestCase):
                 "BASH_ENV": str(clock),
             }
             argv = [str(BASH), "--noprofile", "--norc"]
-            if piped:
+            if site_command:
+                argv += ["-c", site_command]
+            elif piped:
                 argv += ["-s", "--", *args]
             else:
                 copy = root / "install.sh"
@@ -202,17 +209,35 @@ class InstallerIntegrationTests(unittest.TestCase):
         self.assertEqual([], result.phase("registration"))
         self.assert_no_restart(result)
 
-    def test_inference_success_with_wrong_reply_never_registers(self):
-        result = self.run_installer(scenario={"inference_bad_reply": True})
+    def test_empty_inference_never_registers(self):
+        result = self.run_installer(scenario={"inference_empty": True})
         self.assert_failed(result)
         self.assertEqual(1, len(result.phase("inference")))
         self.assertEqual([], result.phase("registration"))
         self.assert_no_restart(result)
 
-    def test_inference_reply_with_extra_text_still_configures(self):
-        result = self.run_installer(scenario={"inference_extra_reply": True})
+    def test_completed_api_response_without_magic_word_still_configures(self):
+        result = self.run_installer()
         self.assertEqual(0, result.status, result.output)
         self.assert_configured(result)
+        self.assertNotIn("Reply only READY", self.source)
+
+    def test_exact_homepage_repair_command_registers_and_restarts(self):
+        page = (INSTALLER.parent / "index.html").read_text()
+        command = html.unescape(re.search(r'<pre id="repair-command"[^>]*>(.*?)</pre>', page, re.S)[1])
+        for failed_download in (False, True):
+            with self.subTest(failed_download=failed_download):
+                result = self.run_installer(site_command=command, scenario={"installer_download_failure": failed_download})
+                self.assertEqual(1, len(result.phase("installer_download")))
+                if failed_download:
+                    self.assert_failed(result)
+                    self.assertEqual([], result.phase("registration"))
+                    self.assert_no_restart(result)
+                else:
+                    self.assertEqual(0, result.status, result.output)
+                    self.assert_configured(result)
+                    self.assertEqual(1, len(result.phase("quit")))
+                    self.assertEqual(1, len(result.phase("reopen")))
 
     def test_successful_restart_quits_then_reopens_exact_app(self):
         result = self.run_installer()
