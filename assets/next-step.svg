@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Drag the AI Operations folder into ChatGPT.</title>
+  <desc id="desc">A folder moves by arrow into the ChatGPT window. Then say: Build my assistant.</desc>
+  <rect width="1600" height="900" fill="#F6F0E2"/>
+  <rect x="0" y="0" width="14" height="900" fill="#F1AB1C"/>
+  <text x="86" y="116" fill="#F1AB1C" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="24">M A N G O M A G I C</text>
+  <text x="80" y="250" fill="#111527" font-family="Playfair Display,Georgia,serif" font-size="104">Drop it in.</text>
+  <text x="84" y="322" fill="#1A1A1A" font-family="Playfair Display,Georgia,serif" font-style="italic" font-size="34">Then say: Build my assistant.</text>
+  <g transform="translate(150 520)">
+    <path d="M0 34 C0 18 12 6 28 6 H86 L112 34 H236 C254 34 266 46 266 64 V174 C266 192 254 204 236 204 H28 C12 204 0 192 0 176 Z" fill="#111527"/>
+    <path d="M0 82 H266 V174 C266 192 254 204 236 204 H28 C12 204 0 192 0 176 Z" fill="#F1AB1C"/>
+    <text x="133" y="151" text-anchor="middle" fill="#111527" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="22">AI OPERATIONS</text>
+  </g>
+  <path d="M520 622 H810 M760 574 L822 622 L760 670" fill="none" stroke="#F1AB1C" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(920 430)">
+    <rect width="520" height="380" rx="38" fill="#111527"/>
+    <rect x="0" y="0" width="520" height="64" rx="38" fill="#111527"/>
+    <rect x="0" y="26" width="520" height="38" fill="#111527"/>
+    <circle cx="44" cy="32" r="8" fill="#F1AB1C"/>
+    <circle cx="72" cy="32" r="8" fill="#C9B98A"/>
+    <text x="260" y="41" text-anchor="middle" fill="#F6F0E2" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="20">CHATGPT</text>
+    <rect x="44" y="112" width="292" height="20" rx="10" fill="#F6F0E2" opacity="0.92"/>
+    <rect x="44" y="156" width="432" height="20" rx="10" fill="#F6F0E2" opacity="0.62"/>
+    <rect x="44" y="200" width="356" height="20" rx="10" fill="#F6F0E2" opacity="0.62"/>
+    <rect x="44" y="268" width="432" height="68" rx="34" fill="#F1AB1C"/>
+    <text x="260" y="311" text-anchor="middle" fill="#111527" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="22">BUILD MY ASSISTANT</text>
+  </g>
+</svg>

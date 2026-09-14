@@ -60,7 +60,7 @@ class OperationsSetupTests(unittest.TestCase):
         self.bin.mkdir()
         # Allow only the stock tools needed for local file setup. No inherited
         # credentials, startup hooks, Python, Git, app CLI, curl or real Finder.
-        for name in ("cat", "mkdir", "chmod", "mktemp", "link", "rm"):
+        for name in ("base64", "cat", "mkdir", "chmod", "mktemp", "link", "rm"):
             (self.bin / name).symlink_to(shutil.which(name, path="/usr/bin:/bin"))
         self.open_log = self.root / "open.log"
         self.mock("open", 'printf "%s\\n" "$@" >> "$OPEN_LOG"\n')
@@ -127,11 +127,10 @@ class OperationsSetupTests(unittest.TestCase):
         self.assertFalse((self.destination / "START_HERE.md").stat().st_mode & 0o111)
         self.assertEqual(self.home_before, self.snapshot(self.home))
         self.assertFalse(self.open_log.exists())
-        self.assertIn("local folder project", result.stdout)
-        self.assertIn("START_HERE.md", result.stdout)
-        self.assertIn("00_Command_Centre/BUILD_MY_ASSISTANT.md", result.stdout)
-        self.assertIn("verify which project-local agent definitions", result.stdout)
-        self.assertIn("No workers were launched", result.stdout)
+        self.assertIn("Folder ready:", result.stdout)
+        self.assertIn("Next: drag this folder into ChatGPT.", result.stdout)
+        self.assertNotIn("Next steps:", result.stdout)
+        self.assertNotIn("No workers were launched", result.stdout)
 
     def test_rerun_preserves_user_edits_modes_and_only_restores_missing(self):
         self.assert_success(self.run_setup())
@@ -146,7 +145,6 @@ class OperationsSetupTests(unittest.TestCase):
         (self.destination / "empty.md").unlink()
         result = self.run_setup()
         self.assert_success(result)
-        self.assertIn("Created 1 file(s)", result.stdout)
         self.assertEqual(before, self.snapshot(self.destination))
 
     def test_curl_pipe_stdin_without_prompting(self):
@@ -327,20 +325,22 @@ class OperationsSetupTests(unittest.TestCase):
 
     def test_finder_only_on_mac_and_not_with_no_open(self):
         self.assert_success(self.run_setup("--destination", str(self.destination), default_args=False))
-        self.assertEqual(str(self.destination) + "\n", self.open_log.read_text())
+        self.assertEqual("-R\n" + str(self.destination / "NEXT.png") + "\n", self.open_log.read_text())
         self.open_log.unlink()
         self.mock("uname", 'printf "Linux\\n"\n')
         self.assert_success(self.run_setup("--destination", str(self.destination), default_args=False))
         self.assertFalse(self.open_log.exists())
 
-    def test_banner_plain_when_redirected(self):
+    def test_output_is_minimal_when_redirected(self):
         result = self.run_setup()
         self.assert_success(result)
-        self.assertIn("ManyMangoes", result.stdout)
-        self.assertIn("Data + AI + Automation", result.stdout)
+        self.assertIn("Folder ready:", result.stdout)
+        self.assertIn("Next: drag this folder into ChatGPT.", result.stdout)
+        self.assertNotIn("ManyMangoes", result.stdout)
+        self.assertNotIn("Data + AI + Automation", result.stdout)
         self.assertNotIn("\x1b", result.stdout)
 
-    def test_banner_colours_only_for_tty_without_no_color(self):
+    def test_output_has_no_colour_codes_on_tty(self):
         for no_color in (None, "", "1"):
             with self.subTest(no_color=no_color):
                 master, slave = os.openpty()
@@ -376,8 +376,8 @@ class OperationsSetupTests(unittest.TestCase):
                         if process.poll() is None:
                             process.kill()
                             process.wait(timeout=5)
-                    self.assertEqual(no_color is None, b"\x1b[" in output)
-                    self.assertIn(b"ManyMangoes", output)
+                    self.assertNotIn(b"\x1b[", output)
+                    self.assertIn(b"Folder ready:", output)
                 finally:
                     os.close(master)
                     if slave is not None:
@@ -435,14 +435,7 @@ exit "${DOWNLOAD_EXIT:-0}"
                 result = self.run_setup(*args, piped=True, env=env)
                 self.assert_success(result)
                 self.assertNotIn("local files only", result.stdout)
-                self.assertIn("START_HERE.md", result.stdout)
-                self.assertIn("00_Command_Centre/BUILD_MY_ASSISTANT.md", result.stdout)
-                if no_restart:
-                    self.assertIn("ChatGPT restart pending", result.stdout)
-                    self.assertNotIn("ChatGPT restarted", result.stdout)
-                else:
-                    self.assertIn("ChatGPT restarted", result.stdout)
-                    self.assertNotIn("restart pending", result.stdout)
+                self.assertIn("Next: drag this folder into ChatGPT.", result.stdout)
                 self.assert_downloads_cleaned(env)
                 for relative in ("START_HERE.md", "00_Command_Centre/ASSISTANT_PROFILE.md"):
                     path = self.destination / relative
@@ -451,7 +444,6 @@ exit "${DOWNLOAD_EXIT:-0}"
                 before = self.snapshot(self.destination)
                 rerun = self.run_setup(*args, env=env)
                 self.assert_success(rerun)
-                self.assertIn("Created 0 file(s)", rerun.stdout)
                 self.assertEqual(before, self.snapshot(self.destination))
                 self.assert_downloads_cleaned(env)
         self.assertEqual(["0", "0", "1", "--no-restart", "1", "--no-restart"],
@@ -485,8 +477,8 @@ exit "${DOWNLOAD_EXIT:-0}"
                 args = ["--with-mangomagic"] + (["--no-restart"] if no_restart else [])
                 result = self.run_setup(*args, env=dict(env, MODEL_EXIT="7"))
                 self.assert_failure(result)
-                self.assertIn("MODEL_PAYLOAD_RAN", result.stdout)
-                self.assertIn("MangoMagic ready (fixture claim)", result.stdout)
+                self.assertIn("MODEL_PAYLOAD_RAN", result.stderr)
+                self.assertIn("MangoMagic ready (fixture claim)", result.stderr)
                 self.assertNotIn("MangoMagic setup completed", result.stdout)
                 self.assertIn("MangoMagic setup failed", result.stderr)
                 self.assertIn("existing workspace files will be preserved", result.stderr)
@@ -525,7 +517,7 @@ exec ''' + real_rm + ' "$@"\n')
         env = self.mock_model_download()
         result = self.run_setup(env=env)
         self.assert_success(result)
-        self.assertIn("Setup copied local files only", result.stdout)
+        self.assertIn("Next: drag this folder into ChatGPT.", result.stdout)
         self.assertFalse(self.download_log.exists())
         self.assertFalse(self.model_log.exists())
 
@@ -583,10 +575,8 @@ exec ''' + real_rm + ' "$@"\n')
         invalid = self.root / "invalid fixture"
         invalid.mkdir()
         target = invalid / "bad.md"
-        for data in (b"nul\0", b"\xff"):
-            target.write_bytes(data)
-            with self.assertRaises((ValueError, UnicodeError)):
-                builder.render(invalid)
+        target.write_bytes(b"\xff")
+        self.assertIn("write_binary_file", builder.render(invalid))
         target.unlink()
         target.symlink_to(self.starter)
         with self.assertRaises(ValueError):

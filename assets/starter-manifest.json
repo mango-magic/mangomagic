@@ -1,5 +1,5 @@
 {
-  "file_count": 41,
+  "file_count": 42,
   "sha256": {
     ".codex/agents/automation.toml": "4454f050e18e1676788139ecf97a12ed9901ee9a5b9163b3d2e38e8ee75c16fc",
     ".codex/agents/chief-of-staff.toml": "28588d9c95ebca9fc6e0be8247a213602bc37f9ab40d804c3f34de8aeb6df9af",
@@ -40,6 +40,7 @@
     "05_Deliverables/README.md": "211b5bf170d996d87298f138462291d513b79b0a45aad3b1092642213c592699",
     "AGENTS.md": "68264792e18853763f65cef8baa551bbc56a8e7f53c0bf87ff2888d7d64ed9b2",
     "CURRENT_MISSION.md": "6fe856f6e835e9723a330cf2eba8417a42d810ef27af37bbcf6681cf98c9e0fc",
+    "NEXT.png": "cee341d2c280cf7104da4462a5702084deb5c8a4e7146eb86241e458cd000bd2",
     "START_HERE.md": "032e41a3b97c4c032a8b8f9f688fc3827431cfa8915dce5e91984aba84dea9a6",
     "project_tasks.json": "604e25f2cafab71cec6c166fa7fa4e2bc01dd30788021726235b41cfd1cf46eb"
   }

@@ -6,6 +6,7 @@ No Python, Git, or template downloads are needed by the generated installer.
 """
 
 import argparse
+import base64
 import hashlib
 import os
 from pathlib import Path
@@ -59,15 +60,6 @@ OPERATIONS_USAGE
             *) fail "Unknown option: $1 (use --help)." ;;
         esac
     done
-    local gold='' bold='' reset=''
-    if [ -t 1 ] && [ -z "${NO_COLOR+x}" ]; then
-        gold=$'\033[38;5;214m'; bold=$'\033[1m'; reset=$'\033[0m'
-    fi
-    printf '\n%s  +--------------------------------------------------+%s\n' "$gold" "$reset"
-    printf '%s%s    ManyMangoes%s\n' "$gold" "$bold" "$reset"
-    printf '    Data + AI + Automation\n'
-    printf '    AI Operations | Your local workspace\n'
-    printf '%s  +--------------------------------------------------+%s\n\n' "$gold" "$reset"
     case "$destination" in /*) ;; *) destination="$PWD/$destination" ;; esac
     # Strip trailing slashes and /., which otherwise hide a symlink root.
     while [ "$destination" != / ]; do
@@ -162,6 +154,42 @@ OPERATIONS_USAGE
         created=$((created + 1))
     }
 
+    write_binary_file() {
+        local relative=$1
+        local path="$destination/$1"
+        check_file "$relative"
+        if [ -f "$path" ]; then
+            preserved=$((preserved + 1))
+            return 0
+        fi
+        if ! (
+            temporary=''
+            cleanup_temp() {
+                local status=$?
+                trap - EXIT
+                if [ -n "$temporary" ]; then
+                    if ! rm -f -- "$temporary"; then
+                        printf 'Cannot remove temporary file: %s\n' "$temporary" >&2
+                        [ "$status" -ne 0 ] || status=1
+                    fi
+                fi
+                exit "$status"
+            }
+            trap cleanup_temp EXIT
+            trap 'exit 130' INT
+            trap 'exit 143' TERM
+            temporary=$(mktemp "${path%/*}/.operations-setup.XXXXXXXX") || exit 1
+            base64 -D > "$temporary" || exit 1
+            chmod 644 "$temporary" || exit 1
+            check_file "$relative"
+            [ ! -e "$path" ] || fail "Destination appeared during setup: $path"
+            link "$temporary" "$path" || exit 1
+        ); then
+            fail "Cannot create file: $path"
+        fi
+        created=$((created + 1))
+    }
+
     # Keep the EXIT trap and its download variable alive in the same scope,
     # without replacing the caller's traps or leaving cleanup until main exits.
     install_mangomagic() (
@@ -185,10 +213,17 @@ OPERATIONS_USAGE
         if ! curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh -o "$f"; then
             fail 'Could not download the MangoMagic installer.'
         fi
+        local output=''
         if [ "$no_restart" -eq 1 ]; then
-            /bin/bash "$f" --no-restart || fail 'MangoMagic setup failed.'
+            if ! output=$(/bin/bash "$f" --no-restart 2>&1); then
+                printf '%s\n' "$output" >&2
+                fail 'MangoMagic setup failed.'
+            fi
         else
-            /bin/bash "$f" || fail 'MangoMagic setup failed.'
+            if ! output=$(/bin/bash "$f" 2>&1); then
+                printf '%s\n' "$output" >&2
+                fail 'MangoMagic setup failed.'
+            fi
         fi
     )
 
@@ -204,26 +239,10 @@ FOOTER = r'''
         fi
     fi
 
-    printf '\nAI Operations folder: %s\n' "$destination"
-    printf 'Created %s file(s); preserved %s existing file(s).\n' "$created" "$preserved"
-    printf '\nNext steps:\n'
-    printf '1. Add this folder as a local folder project in the app.\n'
-    printf '2. Paste this into that project chat (also works when START_HERE.md is from an earlier install):\n'
-    printf '   Build my assistant. Read 00_Command_Centre/BUILD_MY_ASSISTANT.md and follow its workflow using my existing context and authorisation.\n'
-    printf '3. Follow 00_Command_Centre/BUILD_MY_ASSISTANT.md to build your profile and check a first deliverable.\n'
-    printf '4. In the new project chat, verify which project-local agent definitions the app supports.\n'
-    if [ "$with_mangomagic" -eq 1 ]; then
-        if [ "$no_restart" -eq 1 ]; then
-            printf 'MangoMagic setup completed; ChatGPT restart pending. Quit and reopen ChatGPT before selecting MangoMagic 7.1.\n'
-        else
-            printf 'MangoMagic setup completed and ChatGPT restarted. Select MangoMagic 7.1 in the app.\n'
-        fi
-    else
-        printf 'Setup copied local files only.\n'
-    fi
-    printf 'No workers were launched and no schedules were created.\n'
+    printf 'Folder ready: %s\n' "$destination"
+    printf 'Next: drag this folder into ChatGPT.\n'
     if [ "$no_open" -eq 0 ] && [ "$(uname -s)" = Darwin ] && command -v open >/dev/null 2>&1; then
-        if ! open "$destination" </dev/null; then
+        if ! open -R "$destination/NEXT.png" </dev/null; then
             printf 'Could not open Finder. Open the folder above manually.\n' >&2
         fi
     fi
@@ -247,32 +266,47 @@ def render(starter):
         if not stat.S_ISREG(mode):
             raise ValueError("starter special file refused: " + str(path))
         data = path.read_bytes()
-        content = data.decode("utf-8")
-        if b"\0" in data:
+        try:
+            content = data.decode("utf-8")
+            binary = False
+        except UnicodeDecodeError:
+            content = base64.b64encode(data).decode("ascii")
+            binary = True
+        if not binary and b"\0" in data:
             raise ValueError("starter contains NUL bytes: " + str(path))
         relative = path.relative_to(starter).as_posix()
-        files.append((relative, content, bool(mode & 0o111)))
+        files.append((relative, content, bool(mode & 0o111), binary))
         directories.update(parent.as_posix() for parent in Path(relative).parents if parent != Path("."))
     if not files:
         raise ValueError("starter has no text files; refusing an empty installer")
 
     chunks = [HEADER]
-    for relative, _, _ in files:
+    for relative, _, _, _ in files:
         chunks.append("    check_file " + shlex.quote(relative) + "\n")
     chunks.append('    ensure_directory \'\'\n')
     for directory in sorted(directories, key=lambda value: (value.count("/"), value)):
         chunks.append("    ensure_directory " + shlex.quote(directory) + "\n")
-    for relative, content, executable in files:
-        delimiter = "OPERATIONS_DATA_" + hashlib.sha256(content.encode("utf-8")).hexdigest()
-        while delimiter in content.splitlines():
-            delimiter += "_"
-        newline = content.endswith("\n")
-        chunks.append("    write_file {} {} {} <<'{}'\n".format(
-            shlex.quote(relative), int(executable), int(newline), delimiter))
-        chunks.append(content)
-        if content and not newline:
+    for relative, content, executable, binary in files:
+        if binary:
+            delimiter = "OPERATIONS_BINARY_" + hashlib.sha256(content.encode("ascii")).hexdigest()
+            while delimiter in content.splitlines():
+                delimiter += "_"
+            chunks.append("    write_binary_file {} <<'{}'\n".format(
+                shlex.quote(relative), delimiter))
+            chunks.append(content)
             chunks.append("\n")
-        chunks.append(delimiter + "\n")
+            chunks.append(delimiter + "\n")
+        else:
+            delimiter = "OPERATIONS_DATA_" + hashlib.sha256(content.encode("utf-8")).hexdigest()
+            while delimiter in content.splitlines():
+                delimiter += "_"
+            newline = content.endswith("\n")
+            chunks.append("    write_file {} {} {} <<'{}'\n".format(
+                shlex.quote(relative), int(executable), int(newline), delimiter))
+            chunks.append(content)
+            if content and not newline:
+                chunks.append("\n")
+            chunks.append(delimiter + "\n")
     chunks.append(FOOTER)
     return "".join(chunks)
 
