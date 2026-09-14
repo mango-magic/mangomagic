@@ -28,7 +28,7 @@ class Page(HTMLParser):
 
 class StarterSite(unittest.TestCase):
     def test_copy_targets_and_local_links_resolve(self):
-        for filename in ('index.html','assistant.html'):
+        for filename in ('index.html','guide.html','assistant.html'):
             page=Page((ROOT/filename).read_text())
             self.assertEqual(len(page.ids),len(set(page.ids)))
             for target in page.targets:self.assertIn(target,page.pres);self.assertTrue(page.pres[target].strip())
@@ -43,12 +43,15 @@ class StarterSite(unittest.TestCase):
                     if u.fragment and dest.suffix=='.html':
                         self.assertIn(u.fragment,Page(dest.read_text()).ids,link)
     def test_documented_terminal_commands_download_before_execution(self):
-        page=Page((ROOT/'index.html').read_text())
-        for key in ['setup-command','setup-command-steps','everything-command','custom-command','model-command']:
-            command=page.pres[key].strip()
-            self.assertIn('mktemp',command);self.assertIn(' -o "$f" && bash "$f"',command)
-            result=subprocess.run(['/bin/bash','-n','-c',command],capture_output=True,text=True)
-            self.assertEqual(result.returncode,0,result.stderr)
+        for filename in ('index.html','guide.html'):
+            page=Page((ROOT/filename).read_text())
+            commands={key:value for key,value in page.pres.items() if re.search(r'command(?:-steps)?$',key or '')}
+            self.assertIn('everything-command',commands)
+            self.assertIn('--with-mangomagic',commands['everything-command'])
+            for command in commands.values():
+                self.assertIn('mktemp',command);self.assertIn(' -o "$f" && bash "$f"',command)
+                result=subprocess.run(['/bin/bash','-n','-c',command],capture_output=True,text=True)
+                self.assertEqual(result.returncode,0,result.stderr)
     def test_failed_download_does_not_run_payload_and_returns_failure(self):
         # Exercise the exact site command with a test-owned curl that leaves a
         # complete executable payload but returns failure, as an interrupted transfer can.
@@ -77,6 +80,7 @@ class StarterSite(unittest.TestCase):
     def test_readme_prompt_anchors_exist(self):
         md=(ROOT/'docs/PROMPTS.md').read_text()
         anchors={re.sub(r'[^\w\- ]','',line[3:].strip().lower()).replace(' ','-') for line in md.splitlines() if line.startswith('## ')}
-        for anchor in re.findall(r'docs/PROMPTS.md#([^)]*)',(ROOT/'README.md').read_text()):self.assertIn(anchor,anchors)
+        for filename in ('README.md','GUIDE.md'):
+            for anchor in re.findall(r'docs/PROMPTS.md#([^)]*)',(ROOT/filename).read_text()):self.assertIn(anchor,anchors)
 
 if __name__=='__main__':unittest.main()

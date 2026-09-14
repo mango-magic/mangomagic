@@ -6,6 +6,7 @@ let saved = {};
 try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}') || {}; } catch (_) {}
 checks.forEach(input => { input.checked = saved[input.dataset.check] === true; });
 function updateProgress() {
+  if (!checks.length) return;
   const count = checks.filter(input => input.checked).length;
   document.getElementById('progress-text').textContent = `${count} of ${checks.length} checked`;
   document.getElementById('progress-fill').style.width = `${count / checks.length * 100}%`;
@@ -13,23 +14,24 @@ function updateProgress() {
   try { localStorage.setItem(storageKey, JSON.stringify(state)); } catch (_) {}
 }
 checks.forEach(input => input.addEventListener('change', updateProgress));
-document.getElementById('reset-progress').addEventListener('click', () => {
+document.getElementById('reset-progress')?.addEventListener('click', () => {
   checks.forEach(input => { input.checked = false; }); updateProgress();
 });
 updateProgress();
 document.querySelectorAll('[data-copy]').forEach(button => {
   button.addEventListener('click', async () => {
     const target = document.getElementById(button.dataset.copy);
-    const status = button.closest('.copy-block, .prompt-card').querySelector('.copy-status');
+    const status = document.getElementById(button.dataset.status) || button.closest('.copy-block, .prompt-card')?.querySelector('.copy-status');
     const text = target.textContent.trim();
     try {
       if (!navigator.clipboard?.writeText) throw new Error('clipboard unavailable');
       await navigator.clipboard.writeText(text);
-      status.textContent = button.closest('.terminal') || button.dataset.copy.endsWith('command')
+      status.textContent = button.closest('.terminal') || /command(?:-steps)?$/.test(button.dataset.copy)
         ? 'Copied. Paste into Terminal.' : 'Copied. Paste into your project chat.';
     } catch (_) {
       const disclosure = target.closest('details');
       if (disclosure) disclosure.open = true;
+      target.scrollIntoView({block: 'center'});
       const range = document.createRange(); range.selectNodeContents(target);
       const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range);
       status.textContent = 'Automatic copy is unavailable. Text selected: press ⌘C (Mac) or Ctrl+C.';
