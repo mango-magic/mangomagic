@@ -19,15 +19,21 @@ Built by **ManyMangoes** for business owners who want useful outputs, fewer repe
 
 The ManyMangoes pattern is practical: one folder per responsibility, a short current mission, named sources, clear handoffs, a task tracker, and a reviewed deliverable. Start with one outcome. Add complexity only when it earns its place.
 
-## 1. Build your workspace
+## Two ways to set up
 
-**Paste into Terminal on your Mac:**
+**Option A - everything in one go** (workspace + MangoMagic 7.1 + ChatGPT registration, then a graceful ChatGPT restart):
+
+```bash
+bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/setup-operations.sh -o "$f" && bash "$f" --with-mangomagic'
+```
+
+**Option B - workspace only:**
 
 ```bash
 bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/setup-operations.sh -o "$f" && bash "$f"'
 ```
 
-It creates **`~/Documents/AI Operations`** with 38 starter files and opens the folder in Finder. No Git or Python required. Run it again and your existing files stay intact.
+Both create **`~/Documents/AI Operations`** with 38 starter files and open the folder in Finder. No Git or Python required. Run again and your existing files stay intact. Option A runs the model installer for you; use `--no-restart` after `--with-mangomagic` if you want to defer the ChatGPT restart.
 
 The script prepares local files. It does not log into accounts, connect the folder to ChatGPT, launch agents, or create schedules. [Read the script](setup-operations.sh).
 
@@ -100,7 +106,7 @@ For jobs using local files, keep the computer on and the app running. Markdown f
 
 Ask for notifications when something meaningful changes, a task fails or you need to make a decision. Keep sending, publishing and spending within your explicit authorisation.
 
-## Optional: add MangoMagic 7.1
+## Step 6 (optional): add MangoMagic 7.1
 
 ManyMangoes' sales instructions on **GLM 5.3 Flash**, delivered through Ollama:
 
@@ -108,7 +114,7 @@ ManyMangoes' sales instructions on **GLM 5.3 Flash**, delivered through Ollama:
 bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh -o "$f" && bash "$f"'
 ```
 
-This separate installer registers the model and gracefully restarts ChatGPT. Choose **MangoMagic 7.1** after it reopens. It supports images and adjustable reasoning. Our descriptions use **Light / Mango / Super Mango**; ChatGPT's native settings remain **Low or Light / High / Max**.
+Use Option A above to do this as part of the monster setup, or run this separately. It registers the model and gracefully restarts ChatGPT. Choose **MangoMagic 7.1** after it reopens. It supports images and adjustable reasoning. Our descriptions use **Light / Mango / Super Mango**; ChatGPT's native settings remain **Low or Light / High / Max**.
 
 All three use the same model and token rates. More reasoning can take more time and tokens; better answers are not guaranteed. Ollama cloud usage is separate from your ChatGPT subscription. This is instruction customisation, not weight training on private conversations.
 

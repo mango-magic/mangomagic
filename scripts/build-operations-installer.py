@@ -23,7 +23,7 @@ HEADER = r'''#!/bin/bash
 main() {
     set -euo pipefail
     local destination="${HOME:?HOME must be set}/Documents/AI Operations"
-    local no_open=0 created=0 preserved=0
+    local no_open=0 with_mangomagic=0 no_restart=0 created=0 preserved=0
 
     fail() { printf 'Setup stopped: %s\n' "$*" >&2; exit 1; }
     usage() {
@@ -35,10 +35,13 @@ Usage: /bin/bash setup-operations.sh [--destination PATH] [--no-open]
 
   --destination PATH  Folder to populate (default: $HOME/Documents/AI Operations).
   --no-open           Do not open the folder in Finder.
+  --with-mangomagic   Also install MangoMagic 7.1 and register it with ChatGPT.
+  --no-restart        With --with-mangomagic, defer the ChatGPT restart.
   --help              Show this help without making changes.
 
-This creates local files only. Add the folder as a local project in the app,
-then paste the onboarding prompt from START_HERE.md into a task in that project.
+Without --with-mangomagic this creates local files only. Add the folder as a
+local project in the app, then paste the onboarding prompt from START_HERE.md
+into a new task in that project.
 OPERATIONS_USAGE
     }
     while [ "$#" -gt 0 ]; do
@@ -49,6 +52,8 @@ OPERATIONS_USAGE
                 case "$2" in --*) fail '--destination requires a path, not an option.' ;; esac
                 destination=$2; shift 2 ;;
             --no-open) no_open=1; shift ;;
+            --with-mangomagic) with_mangomagic=1; shift ;;
+            --no-restart) no_restart=1; shift ;;
             --help) usage; return 0 ;;
             *) fail "Unknown option: $1 (use --help)." ;;
         esac
@@ -156,10 +161,31 @@ OPERATIONS_USAGE
         created=$((created + 1))
     }
 
+    install_mangomagic() {
+        command -v curl >/dev/null 2>&1 || fail 'MangoMagic setup needs curl.'
+        local f
+        f=$(mktemp) || fail 'Cannot create a temporary file.'
+        trap 'rm -f "$f"' EXIT
+        if ! curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh -o "$f"; then
+            fail 'Could not download the MangoMagic installer.'
+        fi
+        if [ "$no_restart" -eq 1 ]; then
+            bash "$f" --no-restart || fail 'MangoMagic setup failed.'
+        else
+            bash "$f" || fail 'MangoMagic setup failed.'
+        fi
+        trap - EXIT
+        rm -f -- "$f"
+    }
+
     # Validate the entire manifest before creating directories or files.
     check_directory "$destination"
 '''
 FOOTER = r'''
+    if [ "$with_mangomagic" -eq 1 ]; then
+        install_mangomagic
+    fi
+
     printf '\nAI Operations folder: %s\n' "$destination"
     printf 'Created %s file(s); preserved %s existing file(s).\n' "$created" "$preserved"
     printf '\nNext steps:\n'

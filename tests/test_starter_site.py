@@ -39,7 +39,7 @@ class StarterSite(unittest.TestCase):
             else:self.assertTrue((ROOT/unquote(u.path)).is_file(),link)
     def test_documented_terminal_commands_download_before_execution(self):
         page=Page((ROOT/'index.html').read_text())
-        for key in ['setup-command','custom-command','model-command']:
+        for key in ['setup-command','everything-command','custom-command','model-command']:
             command=page.pres[key].strip()
             self.assertIn('mktemp',command);self.assertIn(' -o "$f" && bash "$f"',command)
             result=subprocess.run(['/bin/bash','-n','-c',command],capture_output=True,text=True)

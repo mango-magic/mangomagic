@@ -365,6 +365,20 @@ class OperationsSetupTests(unittest.TestCase):
                     if slave is not None:
                         os.close(slave)
 
+    def test_mangomagic_flags_parse_without_network_or_writes(self):
+        result=self.run_setup('--help',default_args=False,piped=True)
+        self.assert_success(result)
+        self.assertIn('--with-mangomagic',result.stdout)
+        self.assertIn('--no-restart',result.stdout)
+        # --no-restart alone is accepted and harmless; unknown options still fail.
+        result=self.run_setup('--no-restart','--no-open',default_args=False,piped=True)
+        self.assert_success(result)
+        self.assertTrue((self.home/'Documents/AI Operations/START_HERE.md').is_file())
+        shutil.rmtree(self.home/'Documents/AI Operations')
+        result=self.run_setup('--with-mangomagic','--unknown',default_args=False,piped=True)
+        self.assert_failure(result)
+        self.assertFalse((self.home/'Documents/AI Operations').exists())
+
     def test_builder_determinism_and_cli_executable_output(self):
         before = builder.render(self.starter)
         for path in self.starter.rglob("*"):

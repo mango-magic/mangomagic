@@ -10,13 +10,19 @@
 
 ## 1. Install the starter
 
-**Paste into Terminal:**
+**Everything in one go (workspace + MangoMagic 7.1 + ChatGPT registration):**
+
+```bash
+bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/setup-operations.sh -o "$f" && bash "$f" --with-mangomagic'
+```
+
+**Workspace only:**
 
 ```bash
 bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/setup-operations.sh -o "$f" && bash "$f"'
 ```
 
-The installer populates `~/Documents/AI Operations` with the starter files and preserves existing files. It does not sign into accounts, attach the folder to the app, launch workers or create schedules.
+Both populate `~/Documents/AI Operations` with the starter files and preserve existing files. They do not sign into accounts, attach the folder to the app, launch workers or create schedules. Add `--no-restart` after `--with-mangomagic` to defer the ChatGPT restart.
 
 **Then use the ChatGPT desktop app:** create a local project, open its menu → **Edit project → Add folder**, select the installed `AI Operations` folder and choose **Make primary**. Start a new chat there. The primary folder supplies the default working directory and automatic discovery of project instructions and configuration; merely attaching a secondary folder does not provide that discovery. [Official project setup](https://learn.chatgpt.com/docs/projects).
 
