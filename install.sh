@@ -318,6 +318,12 @@ APPLESCRIPT
         *) fail 'This desktop installer needs local Ollama on port 11434. Unset OLLAMA_HOST in this Terminal and rerun.' ;;
     esac
     export OLLAMA_HOST='http://127.0.0.1:11434'
+    # Ollama's desktop registrar and proxy currently use ~/.codex directly.
+    # Do not repair a different catalogue and accidentally claim success.
+    case "${CODEX_HOME:-}" in
+        ''|"$HOME/.codex"|"$HOME/.codex/") ;;
+        *) fail 'This Ollama integration uses ~/.codex. Run "unset CODEX_HOME" in this Terminal, then retry setup.' ;;
+    esac
     if CHATGPT_APP=$(osascript -e 'with timeout of 5 seconds' \
         -e "return POSIX path of (path to application id \"$CHATGPT_BUNDLE_ID\")" \
         -e 'end timeout'); then

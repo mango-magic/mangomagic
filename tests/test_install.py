@@ -111,6 +111,8 @@ class InstallerIntegrationTests(unittest.TestCase):
                 # Bash's real deadline variable when the fake sleep is called.
                 "BASH_ENV": str(clock),
             }
+            if (scenario or {}).get("custom_codex_home"):
+                environment["CODEX_HOME"] = str(home / "other-config")
             argv = [str(BASH), "--noprofile", "--norc"]
             if site_command:
                 argv += ["-c", site_command]
@@ -164,6 +166,14 @@ class InstallerIntegrationTests(unittest.TestCase):
     def test_no_broad_process_killing(self):
         code = "\n".join(line for line in self.source.splitlines() if not line.lstrip().startswith("#"))
         self.assertNotRegex(code, r"\b(?:pkill|killall)\b")
+
+    def test_custom_config_home_stops_before_changing_the_wrong_catalogue(self):
+        result = self.run_installer(scenario={"custom_codex_home": True})
+        self.assert_failed(result)
+        self.assertIn("unset CODEX_HOME", result.output)
+        self.assertEqual([], result.phase("pull"))
+        self.assertEqual([], result.phase("registration"))
+        self.assert_no_restart(result)
 
     def test_curl_pipe_stdin_completes_without_interactive_input(self):
         result = self.run_installer(piped=True)
