@@ -1,63 +1,127 @@
-# MangoMagic 7.1
+# Your AI operations. Sorted.
 
-ManyMangoes' B2B sales intelligence for the ChatGPT Mac app, powered by GLM 5.3 Flash through Ollama.
+### The Holy Trinity: Data + AI + Automation.
 
-## Install with one command
+**Give ChatGPT the context, the team and the routine. Then give it something worth doing.**
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh | bash
-```
+Built by **ManyMangoes** for business owners who want useful outputs, fewer repeated instructions and a clear next move.
 
-The installer sets up Ollama, downloads MangoMagic, checks its capabilities, registers images and thinking controls, then gracefully quits and reopens ChatGPT. Choose **MangoMagic 7.1** in the model menu.
+**[Open the interactive cheat sheet →](https://mango-magic.github.io/mangomagic/)** · [Download the starter kit](https://mango-magic.github.io/mangomagic/assets/AI-Operations-Starter.zip) · [Grab a prompt](docs/PROMPTS.md)
 
-[Simple setup page](https://mango-magic.github.io/mangomagic/) · [Model on Ollama](https://ollama.com/mangomagic/mangomagic-7.1)
+---
 
-## Choose how it works
+## Three things. One way to work.
 
-| Control | What it does |
-| --- | --- |
-| Image upload | Read screenshots, charts and other images alongside your question. |
-| Light (Low / Light in ChatGPT) | Lighter reasoning effort for everyday tasks. |
-| Mango (High in ChatGPT) | High reasoning effort for complex sales decisions. |
-| Super Mango (Max in ChatGPT) | Maximum reasoning effort; replies may take longer. |
+| Data | AI | Automation |
+| :--- | :--- | :--- |
+| Give it your offer, customers, examples and evidence. | Give each specialist a clear job and a definition of done. | Test the useful work, then put it on repeat. |
+| **A reliable starting point.** | **An owner for the outcome.** | **A routine you can trust and check.** |
 
-Light, Mango and Super Mango are our names for GLM's low, high and max reasoning settings. They are included in the model catalogue descriptions. ChatGPT controls its native slider labels; this installer cannot rename High and Max.
+The ManyMangoes pattern is practical: one folder per responsibility, a short current mission, named sources, clear handoffs, a task tracker, and a reviewed deliverable. Start with one outcome. Add complexity only when it earns its place.
 
-All three use the same GLM 5.3 Flash model and token prices. More thinking may consume more tokens and time; it does not guarantee a better answer or a fixed speed/cost difference on every question. Image input is available at every level. OpenAI's separate priority speed toggle is not an Ollama feature.
+## 1. Build your workspace
 
-As checked on 14 September 2026, [Ollama lists](https://ollama.com/pricing) GLM 5.3 Flash at US$0.15 input, US$0.03 cached input and US$0.50 output per million tokens. Ollama credits cover this usage separately from your ChatGPT subscription.
-
-MangoMagic adds ManyMangoes' direct Australian voice, buyer-led outreach, evidence discipline, objection handling and clear next actions. This is an instruction-customised model; its weights have **not** been fine-tuned on private conversations. It only has private business context that you actually provide through your app or tools.
-
-## Requirements
-
-- macOS and the [ChatGPT desktop app](https://chatgpt.com/download).
-- Internet access and [Ollama account access/credits](https://ollama.com/pricing) for the cloud model.
-- Your ChatGPT subscription and Ollama usage are separate. This installer does not purchase a plan or credits.
-
-A first installation may require the normal macOS installation or Ollama sign-in step. The script stops with a clear error if a required step fails.
-
-## Update or repair
-
-Run the same install command again. It backs up the model catalogue before repairing MangoMagic's entry. It restarts ChatGPT so the app loads the changes.
-
-For a scripted setup that must leave the app running:
+**Paste into Terminal on your Mac:**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh | bash -s -- --no-restart
+bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/setup-operations.sh -o "$f" && bash "$f"'
 ```
 
-That option reports **restart pending**. Quit and reopen ChatGPT before checking the new controls.
+It creates **`~/Documents/AI Operations`** with 38 starter files and opens the folder in Finder. No Git or Python required. Run it again and your existing files stay intact.
 
-## For developers
+The script prepares local files. It does not log into accounts, connect the folder to ChatGPT, launch agents, or create schedules. [Read the script](setup-operations.sh).
 
-- Model identifier: `mangomagic/mangomagic-7.1` (the normal `latest` tag; no `v0.1` suffix).
-- Base: `glm-5.3-flash:cloud`.
-- `MangoMagic_7.1.Modelfile` contains the public instructions.
-- `configure-chatgpt.js` verifies the actual cloud backend and thinking routing, then brands the supported `model_catalog_json` entry. It uses built-in macOS JavaScript, preserves other models and does not modify credentials or app binaries.
-- Build releases with `python3 build-model.py`, then `ollama push mangomagic/mangomagic-7.1`. The builder preserves live capabilities, model family and context using Ollama's create API. Creating this cloud alias using only a Modelfile drops that metadata in Ollama 0.34.0.
-- Run installer tests with `python3 -m unittest discover -s tests -p 'test_*.py'`; run catalogue tests with `node tests/test_catalog.js`.
+Prefer a download? [Get the ZIP](https://mango-magic.github.io/mangomagic/assets/AI-Operations-Starter.zip), unzip it and use the same steps below. The kit works with the model and tools available in your app; MangoMagic is optional.
 
-[GLM capabilities](https://ollama.com/library/glm-5.3-flash) · [ChatGPT catalogue configuration](https://learn.chatgpt.com/docs/config-file/config-reference)
+## 2. Connect it to ChatGPT
 
-Built by [ManyMangoes](https://manymangoes.com).
+In the desktop app, create a **local project** named AI Operations. Open the project menu: **Edit project → Add folder**. Select the installed folder and make it primary. Start a new chat there. [Official project instructions](https://learn.chatgpt.com/docs/projects).
+
+**Paste into that project chat:**
+
+```text
+Set up this AI Operations workspace for my business. Read START_HERE.md,
+AGENTS.md, CURRENT_MISSION.md, 00_Command_Centre/BUSINESS_BRIEF.md and
+02_Agents/AGENT_ROSTER.md. Verify file access first. Ask up to five short
+questions together to fill material gaps. Preserve existing content; mark
+unknowns instead of inventing facts. Update the business brief, mission,
+roster and project_tasks.json. Confirm which agents are actually available
+in this client. Show one useful first deliverable and its acceptance checks.
+Do not schedule jobs or send messages during onboarding.
+```
+
+**Using ChatGPT on the web?** Upload the relevant Markdown files and sources to a project, and paste the shared working rules into its project instructions. Keep uploads current. Web projects do not automatically read your Mac's disk or inherit the local Ollama model.
+
+## 3. Meet your team
+
+```text
+AI Operations/
+├── START_HERE.md                 Your first steps and onboarding prompt
+├── AGENTS.md                     Shared working agreement
+├── CURRENT_MISSION.md            What matters right now
+├── project_tasks.json            Actual progress, backed by evidence
+├── 00_Command_Centre/            Business brief, task brief, handoffs
+├── 01_Data/                      Sources and sanitised conversations
+├── 02_Agents/
+│   ├── chief-of-staff/           Owns the outcome
+│   ├── sales/                    Understands the buyer
+│   ├── research/                 Checks the evidence
+│   ├── content/                  Writes in your voice
+│   ├── automation/               Makes useful work repeatable
+│   └── quality/                  Checks the finished result
+├── 03_Projects/                  One folder per outcome
+├── 04_Automations/               Tested routines and schedule records
+├── 05_Deliverables/              Reviewed work, ready to use
+└── .codex/agents/                Project-scoped custom agent definitions
+```
+
+Each role has an `AGENTS.md` and working folder. Six matching TOML definitions are included for supported local Codex clients. **Folders hold context; asking for delegation starts workers.** The onboarding prompt checks actual availability. These roles inherit your selected model and permissions. [Official subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents).
+
+Already have your own agents? Keep their names. Use [ROLE_TEMPLATE.md](starter/02_Agents/ROLE_TEMPLATE.md) to add a folder for each and update the roster. Start only the specialists a task needs; every worker uses model capacity.
+
+## 4. Give it a job
+
+| I need to… | Copy this |
+| :--- | :--- |
+| Get the workspace ready for my business | [Onboard the starter](docs/PROMPTS.md#1-onboard-the-existing-starter) |
+| Get specialists working on one outcome | [Delegate a bounded outcome](docs/PROMPTS.md#2-delegate-one-bounded-outcome) |
+| Learn from the conversations that book meetings | [Build a sales playbook](docs/PROMPTS.md#3-turn-inbox-conversations-into-sales-patterns) |
+| Make a source-backed decision | [Research the decision](docs/PROMPTS.md#4-research-a-decision-from-sources) |
+| Pick up work and finish it properly | [Continue and verify](docs/PROMPTS.md#5-continue-verify-and-prepare-final-review) |
+| Stop repeating the same preparation | [Prepare a routine](docs/PROMPTS.md#6-draft-and-test-a-daily-or-weekly-automation) |
+
+Use the loop: **brief → produce → verify → review → repeat**. Save the output. Link the evidence. Keep the owner review separate from technical completion. A request for “99%” is not a reason to invent progress.
+
+## 5. Put good work on repeat
+
+Try a daily priorities brief, a weekly sales review or a delivery check. Fill [AUTOMATION_BRIEF.md](starter/04_Automations/AUTOMATION_BRIEF.md), test the prompt once, then create the actual scheduled task in the app. Verify its timezone, enabled status, input access and first result.
+
+For jobs using local files, keep the computer on and the app running. Markdown files do not schedule themselves. [Official scheduling guide](https://learn.chatgpt.com/docs/automations).
+
+Ask for notifications when something meaningful changes, a task fails or you need to make a decision. Keep sending, publishing and spending within your explicit authorisation.
+
+## Optional: add MangoMagic 7.1
+
+ManyMangoes' sales instructions on **GLM 5.3 Flash**, delivered through Ollama:
+
+```bash
+bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh -o "$f" && bash "$f"'
+```
+
+This separate installer registers the model and gracefully restarts ChatGPT. Choose **MangoMagic 7.1** after it reopens. It supports images and adjustable reasoning. Our descriptions use **Light / Mango / Super Mango**; ChatGPT's native settings remain **Low or Light / High / Max**.
+
+All three use the same model and token rates. More reasoning can take more time and tokens; better answers are not guaranteed. Ollama cloud usage is separate from your ChatGPT subscription. This is instruction customisation, not weight training on private conversations.
+
+[Model setup and troubleshooting](docs/MODEL-SETUP.md) · [Model on Ollama](https://ollama.com/mangomagic/mangomagic-7.1) · [Ollama pricing](https://ollama.com/pricing)
+
+## Make it yours
+
+- [Full workflow cheat sheet](docs/WORKFLOW-CHEATSHEET.md)
+- [All copy/paste prompts](docs/PROMPTS.md)
+- [Browse the starter files](starter/)
+- [Sources, limitations and verification](docs/SOURCES.md)
+- [Maintainer instructions](docs/MAINTAINING.md)
+
+Generic templates only. Keep your private business data in your own workspace, outside this public repository.
+
+Built by [ManyMangoes](https://manymangoes.com). **Data + AI + Automation.**

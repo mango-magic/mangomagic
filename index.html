@@ -1,292 +1,61 @@
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#F6F0E2">
-  <meta name="description" content="Set up MangoMagic 7.1 by ManyMangoes in ChatGPT with one command.">
-  <title>Set up MangoMagic 7.1 · ManyMangoes</title>
-  <link rel="icon" href="data:,">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      color-scheme: light;
-      --gold: #F1AB1C;
-      --navy: #111527;
-      --cream: #F6F0E2;
-      --charcoal: #1A1A1A;
-      --sand: #C9B98A;
-      --display: "Playfair Display", Georgia, serif;
-      --label: "Montserrat", Arial, sans-serif;
-    }
-    * { box-sizing: border-box; }
-    [hidden] { display: none !important; }
-    body {
-      margin: 0;
-      background: var(--cream);
-      color: var(--charcoal);
-      font: italic 1rem/1.55 var(--display);
-      -webkit-font-smoothing: antialiased;
-    }
-    ::selection { background: var(--gold); color: var(--navy); }
-    a { color: inherit; text-underline-offset: 0.25em; text-decoration-thickness: 1px; }
-    a:hover { text-decoration-thickness: 2px; }
-    :focus-visible { outline: 2px solid var(--navy); outline-offset: 5px; }
-    h1, h2, p, pre { margin: 0; }
-    h1, h2 { font-family: var(--display); font-weight: 400; font-style: normal; }
-    .page { width: min(100% - 64px, 980px); margin: 0 auto; }
-    .masthead {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 30px 0 22px;
-      border-bottom: 1px solid var(--sand);
-    }
-    .wordmark { color: var(--navy); font: 400 1.4rem/1.2 var(--display); }
-    .eyebrow {
-      color: var(--gold);
-      font: 700 0.65rem/1.6 var(--label);
-      font-style: normal;
-    }
-    .label-word { display: inline-block; white-space: nowrap; }
-    .hero { padding: 38px 0 28px; }
-    h1 { color: var(--navy); font-size: clamp(2.75rem, 7vw, 5rem); line-height: 1.1; }
-    .lede { margin-top: 16px; font-size: clamp(1.1rem, 2.3vw, 1.3rem); }
-    .prerequisite { margin-top: 12px; font-size: 0.95rem; }
-    .installer {
-      padding: 28px 32px;
-      border-left: 6px solid var(--gold);
-      background: var(--navy);
-      color: var(--cream);
-    }
-    .installer :focus-visible { outline-color: var(--gold); }
-    .installer h2 { margin: 8px 0; font-size: 1.9rem; line-height: 1.2; }
-    .command {
-      margin: 24px 0 20px;
-      font-style: normal;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-    .command code {
-      font: 400 0.9rem/1.8 ui-monospace, "SFMono-Regular", Consolas, monospace;
-      user-select: all;
-      -webkit-user-select: all;
-    }
-    .copy-row { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 20px; }
-    .copy-button {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      min-height: 48px;
-      min-width: 195px;
-      padding: 13px 20px;
-      border: 0;
-      border-radius: 2px;
-      background: var(--gold);
-      color: var(--navy);
-      font: 700 0.65rem/1.5 var(--label);
-      cursor: pointer;
-    }
-    .copy-button:hover { background: var(--cream); }
-    .copy-button svg { width: 17px; height: 17px; flex: none; }
-    .copy-status { flex: 1 1 220px; min-height: 1.55em; font-size: 0.9rem; }
-    .automatic { margin-top: 20px; max-width: 65ch; font-size: 0.95rem; }
-    .details {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 44px;
-      margin-top: 30px;
-      padding-bottom: 28px;
-    }
-    .details h2 { margin-bottom: 10px; color: var(--navy); font-size: 1.6rem; line-height: 1.2; }
-    .details p { max-width: 39ch; }
-    .model-name { overflow-wrap: anywhere; }
-    .thinking-levels { margin: 10px 0 0; font-size: 0.95rem; }
-    .thinking-levels div { display: grid; grid-template-columns: minmax(100px, 0.35fr) 1fr; gap: 14px; margin-top: 4px; }
-    .thinking-levels dt { font-style: normal; }
-    .thinking-levels dd { margin: 0; }
-    footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 14px 24px;
-      padding: 21px 0 30px;
-      border-top: 1px solid var(--sand);
-      font-size: 0.9rem;
-    }
-    footer nav { display: flex; flex-wrap: wrap; gap: 12px 24px; }
-    @media (max-width: 620px) {
-      .page { width: calc(100% - 36px); }
-      .masthead { padding-top: 24px; gap: 12px; }
-      .wordmark { font-size: 1.2rem; }
-      .hero { padding: 28px 0 24px; }
-      .installer { padding: 24px 20px; border-left-width: 4px; }
-      .installer h2 { font-size: 1.65rem; }
-      .command { margin-top: 20px; }
-      .command code { font-size: 0.8rem; }
-      .copy-row { align-items: flex-start; gap: 12px; }
-      .copy-button { width: 100%; }
-      .copy-status { flex-basis: 100%; }
-      .details { grid-template-columns: 1fr; gap: 26px; }
-      .details p { max-width: none; }
-      footer { align-items: flex-start; flex-direction: column; }
-    }
-    @media print {
-      @page { margin: 16mm; }
-      body { print-color-adjust: exact; -webkit-print-color-adjust: exact; font-size: 10pt; }
-      .page { width: 100%; }
-      .masthead { padding-top: 0; }
-      .hero { padding: 22px 0; }
-      h1 { font-size: 38pt; }
-      .installer { padding: 20px 24px; }
-      .installer, .details section, footer { break-inside: avoid; }
-      .copy-row { display: none; }
-      .details { margin-top: 22px; gap: 24px; }
-      footer { padding-bottom: 0; }
-    }
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111527">
+<meta name="description" content="The ManyMangoes cheat sheet for getting useful work done with ChatGPT. Data + AI + Automation. One-command AI Operations setup, specialist agents and copy/paste prompts.">
+<meta property="og:title" content="Your AI operations. Sorted. | ManyMangoes">
+<meta property="og:description" content="Data + AI + Automation. Build your workspace. Brief your agents. Put useful work on repeat.">
+<title>Your AI operations. Sorted. · ManyMangoes</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js" defer></script>
 </head>
 <body>
-  <!--
-    COPY EDITING: This page is intentionally standalone, with no build step.
-    Keep setup-mangomagic.html and mangomagic-repo/index.html identical.
-    Update the marked copy and link sections here when the verified release changes.
-    The button copies the visible command below; there is no second command string.
-  -->
-  <div class="page">
-    <header class="masthead">
-      <p class="wordmark">ManyMangoes</p>
-      <p class="eyebrow" aria-label="Setup for Mac"><span class="label-word">S E T U P</span> · <span class="label-word">M A C</span></p>
-    </header>
-
-    <main>
-      <!-- EDIT: Product identity and introductory copy. -->
-      <section class="hero" aria-labelledby="page-title">
-        <h1 id="page-title">MangoMagic 7.1.</h1>
-        <p class="lede">ManyMangoes sales intelligence, in ChatGPT.</p>
-        <p class="prerequisite">Start with the <a href="https://chatgpt.com/download/" target="_blank" rel="noopener noreferrer">official ChatGPT Mac app</a> and an internet connection. <a href="https://ollama.com/pricing" target="_blank" rel="noopener noreferrer">Ollama cloud access</a> is separate from your ChatGPT subscription.</p>
-      </section>
-
-      <section class="installer" aria-labelledby="install-title">
-        <p class="eyebrow" aria-label="One command"><span class="label-word">O N E</span> · <span class="label-word">C O M M A N D</span></p>
-        <h2 id="install-title">Copy. Paste. Set up.</h2>
-        <p>Open Terminal on your Mac, paste this command and press Return.</p>
-        <!-- EDIT: Authoritative install command. Keep this as one line in the source. -->
-        <pre class="command"><code id="install-command" tabindex="0" aria-label="Setup command">curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh | bash</code></pre>
-        <div class="copy-row">
-          <button class="copy-button" id="copy-command" type="button" aria-label="Copy setup command" hidden>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-              <rect x="8" y="8" width="12" height="13" rx="1"></rect>
-              <path d="M16 8V3H3v13h5"></path>
-            </svg>
-            <span id="copy-label">C O P Y · C O M M A N D</span>
-          </button>
-          <p class="copy-status" id="copy-status" role="status" aria-live="polite" aria-atomic="true"></p>
-        </div>
-        <noscript><p>Select the command above and copy it into Terminal.</p></noscript>
-        <!-- EDIT: Installer behaviour, verified separately from model capabilities. -->
-        <p class="automatic">The script sets up MangoMagic 7.1 and restarts ChatGPT automatically.</p>
-      </section>
-
-      <div class="details">
-        <!-- EDIT: Final user action and verified model slug. -->
-        <section aria-labelledby="finish-title">
-          <h2 id="finish-title">One final step.</h2>
-          <p>When ChatGPT reopens, choose <span class="model-name">MangoMagic 7.1</span> in the model picker.</p>
-        </section>
-
-        <!-- EDIT: Verified image support and thinking levels. These describe thinking
-             effort, not a separate priority-speed service or guaranteed response times. -->
-        <section class="requirements" aria-labelledby="requirements-title">
-          <h2 id="requirements-title">Images &amp; thinking.</h2>
-          <p>Upload images and choose your thinking level.</p>
-          <dl class="thinking-levels">
-            <div><dt>Light</dt><dd>Low / Light in ChatGPT. Lighter reasoning.</dd></div>
-            <div><dt>Mango</dt><dd>High in ChatGPT. More reasoning effort.</dd></div>
-            <div><dt>Super Mango</dt><dd>Max in ChatGPT. Most reasoning effort; may take longer.</dd></div>
-          </dl>
-          <p>ChatGPT supplies the slider labels. All three use GLM 5.3 Flash at the same token rates; time, usage and answer quality vary by task.</p>
-        </section>
-      </div>
-    </main>
-
-    <!-- EDIT: Verified release description and resource links. -->
-    <footer>
-      <p>Instruction-customised by ManyMangoes on GLM 5.3 Flash.</p>
-      <nav aria-label="MangoMagic resources">
-        <a href="https://ollama.com/mangomagic/mangomagic-7.1" target="_blank" rel="noopener noreferrer">Model on Ollama ↗</a>
-        <a href="https://github.com/mango-magic/mangomagic/blob/main/install.sh" target="_blank" rel="noopener noreferrer">Read the GitHub script ↗</a>
-      </nav>
-    </footer>
-  </div>
-
-  <script>
-    (() => {
-      const button = document.getElementById("copy-command");
-      const label = document.getElementById("copy-label");
-      const command = document.getElementById("install-command");
-      const status = document.getElementById("copy-status");
-      const defaultLabel = label.textContent;
-      let resetTimer;
-      let copying = false;
-
-      function selectCommand() {
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(command);
-        command.focus({ preventScroll: true });
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-
-      button.addEventListener("click", async () => {
-        if (copying) return;
-        copying = true;
-        window.clearTimeout(resetTimer);
-        label.textContent = defaultLabel;
-        status.textContent = "";
-        let copied = false;
-
-        try {
-          if (navigator.clipboard && window.isSecureContext) {
-            await navigator.clipboard.writeText(command.textContent.trim());
-            copied = true;
-          }
-        } catch {
-          // A denied clipboard permission falls back to copying the visible selection.
-        }
-
-        if (!copied) {
-          try {
-            selectCommand();
-            copied = document.execCommand("copy");
-          } catch {
-            copied = false;
-          }
-        }
-
-        if (copied) {
-          label.textContent = "C O P I E D";
-          status.textContent = "Copied. Paste into Terminal and press Return.";
-          window.getSelection()?.removeAllRanges();
-          button.focus({ preventScroll: true });
-          resetTimer = window.setTimeout(() => {
-            label.textContent = defaultLabel;
-          }, 3000);
-        } else {
-          status.textContent = "Select the command above and press ⌘C to copy.";
-        }
-
-        copying = false;
-      });
-
-      button.hidden = false;
-    })();
-  </script>
-</body>
-</html>
+<a class="skip" href="#start">Skip to setup</a>
+<header class="masthead wrap"><a class="wordmark" href="#">ManyMangoes<span>THE AI OPERATIONS CHEAT SHEET</span></a><nav aria-label="Main"><a href="#start">Set up</a><a href="#team">Your team</a><a href="#prompts">Copy &amp; go</a><a href="https://github.com/mango-magic/mangomagic">GitHub ↗</a></nav></header>
+<main>
+<section class="hero wrap">
+<div><p class="eyebrow">T H E · M A N Y M A N G O E S · W A Y</p><h1>Your AI operations.<br><em>Sorted.</em></h1><p class="lede">Give ChatGPT the context, the team and the routine.<br>Then give it something worth doing.</p><div class="actions"><a class="button" href="#start">Build my workspace <span aria-hidden="true">↗</span></a><a class="text-link" href="#prompts">Already set up? Grab a prompt →</a></div><p class="small">For business owners who want finished work, fewer repeated instructions and a clear next move.</p></div>
+<aside class="hero-note"><span class="big-number">3</span><p>Useful data.<br>Clear ownership.<br>Work that repeats.</p><span class="eyebrow">L E S S · B U S Y W O R K</span></aside>
+</section>
+<section class="trinity wrap" aria-labelledby="trinity-title">
+<div class="trinity-heading"><p class="eyebrow">T H E · H O L Y · T R I N I T Y</p><h2 id="trinity-title">Data + AI + Automation.</h2><p>One connected way to work.</p></div>
+<div class="trinity-grid"><article><span class="step-no">01</span><h3>Data.</h3><p>Your offers, customers, examples and evidence. Give the work a reliable starting point.</p><a href="#context">Give it context →</a></article><article><span class="step-no">02</span><h3>AI.</h3><p>A specialist with a clear job, the right sources and a definition of done.</p><a href="#team">Give it ownership →</a></article><article><span class="step-no">03</span><h3>Automation.</h3><p>Test the job once. Put the useful parts on repeat. Hear about the changes that matter.</p><a href="#automate">Give it a routine →</a></article></div>
+</section>
+<div class="wrap section-intro"><p class="eyebrow">F R O M · F O L D E R · T O · F I N I S H E D</p><h2>Your setup, in five moves.</h2><p>Start at one. Come back here whenever you need a hand.</p></div>
+<div class="workspace-layout wrap">
+<aside class="progress-panel"><h3>Your checklist.</h3><p class="small">Tick what you have checked. Saved in this browser only.</p><div class="progress-track"><span id="progress-fill"></span></div><p id="progress-text" role="status">0 of 5 checked</p><div class="checks"><label><input type="checkbox" data-check="workspace"> Workspace created</label><label><input type="checkbox" data-check="connected"> Folder connected</label><label><input type="checkbox" data-check="context"> Business brief added</label><label><input type="checkbox" data-check="delivery"> First output verified</label><label><input type="checkbox" data-check="routine"> First routine tested</label></div><button class="plain-button" id="reset-progress" type="button">Reset checklist</button><a href="assets/AI-Operations-Starter.zip" download>Download the whole starter kit ↓</a><p class="small">Files and instructions are ready. Account sign-in, folder access and scheduled tasks are set up in your app.</p></aside>
+<div class="guide">
+<section class="guide-step" id="start"><p class="eyebrow">M O V E · 0 1</p><h2>A home for your AI team.</h2><p>Open Terminal on your Mac. Paste this once. The script creates <code>Documents/AI Operations</code> with six role folders, project templates and ready-to-use instructions.</p>
+<div class="copy-block terminal"><div class="block-heading"><span>PASTE INTO TERMINAL · MAC</span><button type="button" data-copy="setup-command">Copy command</button></div><pre id="setup-command"><code>bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/setup-operations.sh -o "$f" && bash "$f"'</code></pre><span class="copy-status" aria-live="polite"></span></div>
+<p class="small">No Git or Python needed. Existing files are preserved. It opens your folder in Finder; it does not launch agents, schedule jobs or change your global settings. <a href="https://github.com/mango-magic/mangomagic/blob/main/setup-operations.sh">Read the script ↗</a></p>
+<details><summary>Prefer a download, or a different folder?</summary><p><a href="assets/AI-Operations-Starter.zip" download>Download the starter ZIP</a> and unzip it. To choose a destination with the script:</p><div class="copy-block"><div class="block-heading"><span>TERMINAL</span><button data-copy="custom-command" type="button">Copy command</button></div><pre id="custom-command"><code>bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/setup-operations.sh -o "$f" && bash "$f" --destination "$HOME/Desktop/AI Operations"'</code></pre><span class="copy-status" aria-live="polite"></span></div><p>The command is for macOS. On other systems, use the ZIP and a client that supports the workflow.</p></details>
+<details id="model-setup"><summary>Want MangoMagic 7.1 in ChatGPT too?</summary><p>Our ManyMangoes B2B sales instructions, powered by GLM 5.3 Flash through Ollama. This separate Mac installer pulls the model, checks it, registers it and gracefully restarts ChatGPT.</p><div class="copy-block"><div class="block-heading"><span>TERMINAL · RESTARTS CHATGPT</span><button data-copy="model-command" type="button">Copy command</button></div><pre id="model-command"><code>bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh -o "$f" && bash "$f"'</code></pre><span class="copy-status" aria-live="polite"></span></div><p>After the restart, choose <strong>MangoMagic 7.1</strong>. Images are supported. Light = Low/Light, Mango = High, Super Mango = Max. ChatGPT owns the slider labels.</p><p>All three use the same model and token rates. Extra reasoning can use more time and tokens; it does not guarantee a better answer. <a href="https://ollama.com/pricing">Ollama cloud usage</a> is separate from your ChatGPT subscription. This is instruction customisation, not weight fine-tuning.</p><p><a href="https://chatgpt.com/download/">ChatGPT for Mac ↗</a> · <a href="https://ollama.com/mangomagic/mangomagic-7.1">MangoMagic model ↗</a> · <a href="docs/MODEL-SETUP.md">Model setup guide</a></p></details>
+</section>
+<section class="guide-step" id="connect"><p class="eyebrow">M O V E · 0 2</p><h2>Let ChatGPT into the workspace.</h2><ol><li>In the desktop app, create a <strong>local project</strong> called AI Operations.</li><li>Open the project menu: <strong>Edit project → Add folder</strong>. Choose your new AI Operations folder and make it primary.</li><li>Start a new chat in that project. Paste the onboarding prompt below.</li></ol><p>The first check is real file access. If the assistant cannot read your mission and business brief, setup is not connected yet. <a href="https://learn.chatgpt.com/docs/projects">Official project instructions ↗</a></p>
+<details><summary>Using ChatGPT on the web?</summary><p>Create a ChatGPT project, upload the relevant starter Markdown files and business sources, and paste the shared AGENTS.md rules into project instructions. Keep uploads current. A web project does not automatically read your Mac's folders, run the Mac installer or inherit its Ollama model. Local custom agent definitions apply to supported local Codex clients.</p><p>Use the prompts with the tools your account actually has. If file writing or delegation is unavailable, the assistant can return file contents and work through roles sequentially.</p></details>
+</section>
+<section class="guide-step" id="context"><p class="eyebrow">M O V E · 0 3</p><h2>Teach it how your business works.</h2><p>Start with five useful inputs: <strong>what you sell, who buys, claims you can prove, examples you like, and the outcome you need.</strong> The onboarding prompt turns them into a reusable business brief.</p><div class="copy-block"><div class="block-heading"><span>PASTE INTO YOUR PROJECT CHAT</span><button data-copy="onboard-prompt" type="button">Copy onboarding prompt</button></div><pre id="onboard-prompt">Set up this AI Operations workspace for my business. Read AGENTS.md, 00_Command_Centre/BUSINESS_BRIEF.md, CURRENT_MISSION.md and 02_Agents/AGENT_ROSTER.md. First verify that you can read these files; if you cannot, explain the missing access without pretending setup worked. Ask me up to five short questions together to fill material gaps in the business brief. Use facts I provide; leave unknowns marked unknown. Preserve existing content. Recommend only the roles I need. Explain which custom agents are actually available in this client and which are just role instructions. Update the business brief, mission, roster and project_tasks.json. Show one useful first deliverable and its acceptance criteria. Do not run recurring tasks or send messages as part of onboarding.</pre><span class="copy-status" aria-live="polite"></span></div><p class="small">Give it examples of responses you appreciate. Ask it to adapt its tone and level of detail, without personality labels.</p>
+<div class="file-map"><h3>Know where everything lives.</h3><dl><div><dt>00_Command_Centre</dt><dd>Your business brief, task brief and handoff template.</dd></div><div><dt>01_Data</dt><dd>Source documents, sanitised conversations and a source register.</dd></div><div><dt>02_Agents</dt><dd>One folder and instruction file for each role.</dd></div><div><dt>03_Projects</dt><dd>One folder per outcome. Drafts, task evidence and checks.</dd></div><div><dt>04_Automations</dt><dd>Tested routines and records of actual schedules.</dd></div><div><dt>05_Deliverables</dt><dd>Reviewed work you can find, use and share.</dd></div></dl><p class="small">At the root: <code>AGENTS.md</code> sets working rules, <code>CURRENT_MISSION.md</code> sets the priority, and <code>project_tasks.json</code> records actual progress.</p></div>
+</section>
+<section class="guide-step" id="team"><p class="eyebrow">M O V E · 0 4</p><h2>Give everyone a proper job.</h2><p>Use one lead to coordinate. Bring in specialists when the task benefits. Start with one useful outcome, not six busy agents.</p><div class="roles"><article><span>01</span><h3>Chief of Staff.</h3><p>Turns priorities into owned tasks and brings the finished work together.</p></article><article><span>02</span><h3>Sales.</h3><p>Works from buyer conversations, approved offers and real objections.</p></article><article><span>03</span><h3>Research.</h3><p>Finds sources, checks claims and makes uncertainty visible.</p></article><article><span>04</span><h3>Content.</h3><p>Turns approved ideas into clear drafts in your voice.</p></article><article><span>05</span><h3>Automation.</h3><p>Makes the repeatable parts reliable, with a test and a stop condition.</p></article><article><span>06</span><h3>Quality.</h3><p>Checks whether the work meets the brief and the evidence supports it.</p></article></div><p>Each role gets an <code>AGENTS.md</code> and a working folder. The kit also includes project-scoped <code>.codex/agents</code> definitions for supported local clients. The onboarding prompt checks what is available. <strong>Folders hold context; delegation starts workers.</strong></p><p>Already have agents? Use <a href="starter/02_Agents/ROLE_TEMPLATE.md" download>ROLE_TEMPLATE.md</a> and add a matching folder to the roster. Keep the names you already use.</p><p class="small"><a href="https://learn.chatgpt.com/docs/agent-configuration/subagents">Official subagent guidance ↗</a> · Each worker consumes model usage. More workers are useful only when their jobs can run independently.</p>
+</section>
+<section class="guide-step" id="automate"><p class="eyebrow">M O V E · 0 5</p><h2>Put the good work on repeat.</h2><p>Run a task manually. Check the output. Fix the instructions. Then schedule it. Start with a daily priorities brief, a weekly sales review or a delivery check.</p><ol><li>Use the automation prompt below to define inputs, cadence, timezone, output and failure handling.</li><li>Test the prompt in a normal project chat.</li><li>Create the task in the app and verify it under <strong>Scheduled</strong>, including its timezone and enabled status.</li><li>Review the first run. Keep the useful notifications; cut the noise.</li></ol><p>For local-file schedules, keep the computer on, the app running and the project available. A Markdown file is a reusable brief, not a running schedule. <a href="https://learn.chatgpt.com/docs/automations">Official scheduling guide ↗</a></p><a class="text-link" href="#automation-prompt-card">Copy the automation prompt ↓</a></section>
+</div></div>
+<section class="prompt-library wrap" id="prompts"><div class="section-heading"><div><p class="eyebrow">C O P Y · P A S T E · P R O G R E S S</p><h2>Give it a job. Get an output.</h2><p>These go into a project chat, not Terminal. Replace the bracketed details.</p></div><a href="docs/PROMPTS.md">All prompts as Markdown ↗</a></div><div class="filters" role="group" aria-label="Filter prompts"><button type="button" data-filter="all" aria-pressed="true">All jobs</button><button type="button" data-filter="team" aria-pressed="false">Team</button><button type="button" data-filter="sales" aria-pressed="false">Sales</button><button type="button" data-filter="research" aria-pressed="false">Research</button><button type="button" data-filter="automation" aria-pressed="false">Automation</button></div><div class="prompt-grid">
+<article class="prompt-card" data-category="team"><p class="eyebrow">T E A M</p><h3>Brief the specialists.</h3><p>One outcome. Clear ownership. One integrated result.</p><details><summary>Read prompt</summary><pre id="team-prompt">Read AGENTS.md, CURRENT_MISSION.md and project_tasks.json. Deliver [specific outcome] in 03_Projects/[project]. Use [source files] and meet [acceptance criteria] by [deadline]. If supported, delegate independent parts to up to three relevant specialists. Give each a role file to read, exact inputs, a separate output path, file scope and a definition of done. Use fewer agents when practical. If delegation is unavailable, work sequentially and say so. Integrate the work, verify it against the evidence, update the tracker and return the deliverable with any remaining decisions. Continue authorised work without unnecessary check-ins.</pre></details><button data-copy="team-prompt" type="button">Copy team prompt</button><span class="copy-status" aria-live="polite"></span></article>
+<article class="prompt-card" data-category="sales"><p class="eyebrow">S A L E S</p><h3>Turn conversations into a playbook.</h3><p>Find what moves buyers forward, and what does not.</p><details><summary>Read prompt</summary><pre id="sales-prompt">Read the approved offer and sanitised inbox conversations in 01_Data. Build a sales playbook for [buyer segment]. Find buying triggers, objections, useful questions and next steps. Cite anonymised source IDs and show sample size, counterexamples and whether a meeting was actually confirmed. Separate observed patterns from your suggestions. Do not invent conversion rates or personalisation. Produce three short draft response sequences, verify every business claim, and save the playbook and evidence in 03_Projects/[project]. Update project_tasks.json. Do not send messages.</pre></details><button data-copy="sales-prompt" type="button">Copy sales prompt</button><span class="copy-status" aria-live="polite"></span></article>
+<article class="prompt-card" data-category="research"><p class="eyebrow">R E S E A R C H</p><h3>Make a decision with evidence.</h3><p>Useful options, checked claims and a recommendation.</p><details><summary>Read prompt</summary><pre id="research-prompt">Research [decision] for [audience] using [approved documents and research scope]. Verify time-sensitive facts with primary sources when research tools are available. Record source dates and links. Separate facts, inference and unknowns; include conflicting evidence and what could change the answer. Save a one-page decision brief with options, recommendation, key risks and next action in 03_Projects/[project]. Check every material claim against its source. Update project_tasks.json and state any sources you could not access.</pre></details><button data-copy="research-prompt" type="button">Copy research prompt</button><span class="copy-status" aria-live="polite"></span></article>
+<article class="prompt-card" data-category="team"><p class="eyebrow">D E L I V E R Y</p><h3>Keep going. Check the work.</h3><p>Resume from the files and finish what is authorised.</p><details><summary>Read prompt</summary><pre id="continue-prompt">Resume the current mission from AGENTS.md, CURRENT_MISSION.md, project_tasks.json and the latest handoffs. Inspect the actual outputs before trusting recorded status. Complete the highest-priority unblocked work within the authorised scope. Verify acceptance criteria and record evidence paths, failures and next actions. Never inflate completion percentages. Prepare the finished deliverable for owner review only after all required work and checks are done. If a decision or missing access blocks progress, state exactly what is needed and continue independent work. Return the result, its verification and the next decision.</pre></details><button data-copy="continue-prompt" type="button">Copy continuation prompt</button><span class="copy-status" aria-live="polite"></span></article>
+<article class="prompt-card" data-category="automation" id="automation-prompt-card"><p class="eyebrow">A U T O M A T I O N</p><h3>Build a routine worth keeping.</h3><p>Prepare it, test it, then verify the actual schedule.</p><details><summary>Read prompt</summary><pre id="automation-prompt">Prepare a recurring [job] for this project. Cadence: [schedule]. Timezone: [Area/City]. Inputs: [specific accessible files or connected tools]. Output: [file and success check]. Read 04_Automations/AUTOMATION_BRIEF.md and fill a copy for this routine. Define duplicate prevention, retry limit, stop condition and usage budget. Notify only on a meaningful change, actionable failure or required decision. Run one bounded manual test and inspect its output. Keep this a draft until I ask to schedule it; a saved file is not a scheduled task. Then verify the saved app schedule, timezone, enabled status and input access before reporting it active. Do not send messages, publish or spend as part of this routine.</pre></details><button data-copy="automation-prompt" type="button">Copy automation prompt</button><span class="copy-status" aria-live="polite"></span></article>
+<article class="prompt-card" data-category="team"><p class="eyebrow">Q U A L I T Y</p><h3>Give it a proper final check.</h3><p>Find material problems before they reach a customer.</p><details><summary>Read prompt</summary><pre id="quality-prompt">Review [deliverable path] against [task brief] and its cited sources. Check factual claims, calculations, links, missing requirements and whether the output is useful to its intended reader. Distinguish checks actually performed from checks still needed. Return pass, needs changes or blocked, with evidence and specific corrections. Fix routine issues within the authorised scope, recheck them and update project_tasks.json. Keep owner approval separate from technical completion. If this reviews your own work, disclose that the review is not independent.</pre></details><button data-copy="quality-prompt" type="button">Copy quality prompt</button><span class="copy-status" aria-live="polite"></span></article>
+</div></section>
+<section class="downloads wrap" id="downloads"><div><p class="eyebrow">K E E P · T H E · P L A Y B O O K</p><h2>Files that do the explaining.</h2><p>Read them, adapt them, or give them to your project chat. The starter contains generic templates, not anyone's private business data.</p><a class="button" href="assets/AI-Operations-Starter.zip" download>Download starter kit ↓</a></div><div class="download-links"><a href="starter/START_HERE.md" download>Start here <span>MD ↓</span></a><a href="starter/AGENTS.md" download>Working agreement <span>MD ↓</span></a><a href="starter/00_Command_Centre/BUSINESS_BRIEF.md" download>Business brief <span>MD ↓</span></a><a href="starter/02_Agents/ROLE_TEMPLATE.md" download>Add your own agent <span>MD ↓</span></a><a href="starter/04_Automations/AUTOMATION_BRIEF.md" download>Automation brief <span>MD ↓</span></a><a href="docs/WORKFLOW-CHEATSHEET.md">Full workflow cheat sheet <span>MD ↗</span></a></div></section>
+<section class="faq wrap"><p class="eyebrow">W H E N · S O M E T H I N G · D O E S N ' T · C L I C K</p><h2>A few useful answers.</h2><details><summary>It says setup finished. Why does ChatGPT not know my files?</summary><p>The script finished creating the workspace. Attach it as the primary folder of a local project and start a new chat there. Ask ChatGPT to name and summarise the mission file. A file existing on disk does not prove the app can read it.</p></details><details><summary>Do I need MangoMagic for this system?</summary><p>No. The workspace and prompts can be used with the model available in your app. MangoMagic 7.1 is our optional sales-focused instruction setup on GLM 5.3 Flash. Model availability, tools and scheduling depend on your client and account.</p></details><details><summary>Will this use my existing agents?</summary><p>It preserves existing files and global settings. Map your agents to folders in AGENT_ROSTER.md using ROLE_TEMPLATE.md. The six included project definitions are suggestions, not an import of your existing account configuration. Ask the app to verify the roles it can actually delegate to.</p></details><details><summary>Is this training the model on my business?</summary><p>It supplies context and instructions. It does not change model weights or make a public model know your private files. Only provide source material you want the selected model and connected tools to process.</p></details><details><summary>What should I automate first?</summary><p>A short internal priorities brief or a weekly delivery review. Give it a narrow input, a useful output and a check you can repeat. Test it before adding a schedule. Keep customer messaging and publishing within your explicit authorisation.</p></details></section>
+</main>
+<footer class="wrap"><div><a class="wordmark" href="https://manymangoes.com">ManyMangoes</a><p>Data + AI + Automation. Built to get useful work done.</p></div><div><a href="https://github.com/mango-magic/mangomagic">View the source ↗</a><a href="docs/SOURCES.md">Setup sources &amp; verification</a><span>Setup guidance checked 14 September 2026.</span></div></footer>
+<noscript><p class="wrap">JavaScript is off. Select and copy the commands or prompts manually. All guides and downloads remain available.</p></noscript>
+</body></html>

@@ -1,0 +1,35 @@
+{
+  "project": "Set a concrete outcome",
+  "status": "not_started",
+  "completion_policy": "Completion requires acceptance evidence. Reserve final owner review; never report 99% merely because requested.",
+  "tasks": [
+    {
+      "id": "define",
+      "title": "Define outcome and acceptance criteria",
+      "status": "not_started",
+      "owner": "chief-of-staff",
+      "evidence": []
+    },
+    {
+      "id": "produce",
+      "title": "Produce the deliverable",
+      "status": "not_started",
+      "owner": "assign_role",
+      "evidence": []
+    },
+    {
+      "id": "verify",
+      "title": "Verify against source evidence and acceptance criteria",
+      "status": "not_started",
+      "owner": "quality",
+      "evidence": []
+    },
+    {
+      "id": "review",
+      "title": "Owner review",
+      "status": "reserved_for_owner",
+      "owner": "owner",
+      "evidence": []
+    }
+  ]
+}
