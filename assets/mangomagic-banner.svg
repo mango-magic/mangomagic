@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" role="img" aria-labelledby="title desc">
   <title id="title">MangoMagic 7.1 by ManyMangoes.</title>
-  <desc id="desc">Sharper outreach. Stronger follow-ups. Clearer next moves. Data + AI + Automation.</desc>
+  <desc id="desc">The business AI system for the modern worker. Data + AI + Automation.</desc>
   <rect width="1280" height="400" fill="#F6F0E2"/>
   <rect x="24" y="24" width="1232" height="352" fill="#111527"/>
   <rect x="24" y="24" width="8" height="352" fill="#F1AB1C"/>
   <text x="78" y="87" fill="#F1AB1C" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="15">M A N Y M A N G O E S</text>
   <text x="74" y="189" fill="#F6F0E2" font-family="Playfair Display,Georgia,serif" font-size="85">MangoMagic 7.1.</text>
-  <text x="79" y="247" fill="#F6F0E2" font-family="Playfair Display,Georgia,serif" font-style="italic" font-size="28">Sharper outreach. Stronger follow-ups. Clearer next moves.</text>
+  <text x="79" y="247" fill="#F6F0E2" font-family="Playfair Display,Georgia,serif" font-style="italic" font-size="28">The business AI system for the modern worker.</text>
   <text x="79" y="329" fill="#F1AB1C" font-family="Montserrat,Arial,sans-serif" font-weight="700" font-size="14">D A T A  +  A I  +  A U T O M A T I O N</text>
 </svg>

@@ -33,4 +33,4 @@ The assistant prompt starts a personalisation conversation after file access is 
 
 The automated release checks cover literal file installation, preservation on rerun, shell compatibility, error paths, starter archive contents, links within the site, copy-target wiring, and template schemas. Browser checks cover copy controls, filtering, checklist state and responsive layout.
 
-They do not guarantee every user's client discovers custom agents, every account has scheduling, or every sales output is correct. The onboarding prompt checks access and role availability; the first useful task tests the workflow in that user's environment.
+They do not guarantee every user's client discovers custom agents, every account has scheduling, or every output is correct. The onboarding prompt checks access and role availability; the first useful task tests the workflow in that user's environment.

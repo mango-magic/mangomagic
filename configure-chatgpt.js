@@ -6,7 +6,7 @@ var MODEL = 'mangomagic/mangomagic-7.1';
 var BASE = 'glm-5.3-flash';
 var EFFORTS = [
   {effort: 'low', description: 'Light: lighter reasoning effort for everyday tasks'},
-  {effort: 'high', description: 'Mango: high reasoning effort for complex sales decisions'},
+  {effort: 'high', description: 'Mango: high reasoning effort for complex work and decisions'},
   {effort: 'max', description: 'Super Mango: maximum reasoning effort; may take longer'}
 ];
 
@@ -35,7 +35,7 @@ function repairCatalog(catalogue, wrapper, base) {
   if (!matches.length) throw new Error('MangoMagic is not registered. Run the installer registration step first.');
   matches.forEach(function (m) {
     m.display_name = 'MangoMagic 7.1';
-    m.description = 'Sharper outreach. Stronger follow-ups. By ManyMangoes. Images and adjustable thinking.';
+    m.description = 'The business AI system for the modern worker. By ManyMangoes. Images, tools and adjustable thinking.';
     m.input_modalities = ['text', 'image'];
     m.supported_reasoning_levels = JSON.parse(JSON.stringify(EFFORTS));
     m.default_reasoning_level = 'low';

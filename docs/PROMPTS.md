@@ -153,3 +153,11 @@ record its name/ID. Inspect the first scheduled result separately. Local-file
 jobs require the computer on, app running and project available. A saved file
 schedules nothing. If scheduling is unavailable, return a manual checklist.
 ```
+
+## 7. Draft a useful document
+
+**Destination:** your connected project chat.
+
+```text
+Read AGENTS.md, CURRENT_MISSION.md, the business brief and my assistant profile. Draft the document needed for my current task using the relevant source files and my working preferences. If the document or audience is unclear, ask one concise question. Use verified facts, show material assumptions and keep the result useful to its reader. Check figures, dates and links. Save the draft in the relevant project folder without overwriting existing work, then update project_tasks.json with its path and checks. Keep external delivery within my actual authorisation.
+```

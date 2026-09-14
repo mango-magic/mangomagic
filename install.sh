@@ -86,8 +86,8 @@ USAGE
         printf '\n'
         printf '  %s%s| %s%-52s%s\n' "$NAVY_BG" "$GOLD" "$BOLD" 'M A N Y M A N G O E S' "$RESET"
         printf '  %s%s| %s%s%-52s%s\n' "$NAVY_BG" "$GOLD" "$CREAM" "$BOLD" 'MangoMagic 7.1.' "$RESET"
-        printf '  %s%s| %s%-52s%s\n' "$NAVY_BG" "$GOLD" "$CREAM" 'B2B sales intelligence for ChatGPT.' "$RESET"
-        printf '  %s%s  %-52s%s\n' "$PAPER" "$ITALIC" 'Built for better buyer conversations.' "$RESET"
+        printf '  %s%s| %s%-52s%s\n' "$NAVY_BG" "$GOLD" "$CREAM" 'The business AI system for the modern worker.' "$RESET"
+        printf '  %s%s  %-52s%s\n' "$PAPER" "$ITALIC" 'Concise answers. Checked work. Useful agents.' "$RESET"
         printf '\n'
         note "$MODEL"
         if [ "$RESTART_CHATGPT" -eq 1 ]; then
@@ -405,10 +405,10 @@ APPLESCRIPT
     fi
     printf '\n  In ChatGPT, open the model selector and choose:\n'
     printf '  %sMangoMagic 7.1%s (%s)\n' "$BOLD" "$RESET" "$MODEL"
-    printf '\n  Try: "Write an outreach message for a CFO who is\n'
-    printf '        struggling with manual invoice processing."\n\n'
+    printf '\n  Try: "Turn these notes into a clear action plan.\n'
+    printf '        Check the facts and keep it concise."\n\n'
     rule
-    printf '  %sM A N Y M A N G O E S%s  -  Better buyer conversations.\n\n' "$GOLD" "$RESET"
+    printf '  %sM A N Y M A N G O E S%s  -  Less busywork. More useful work.\n\n' "$GOLD" "$RESET"
 }
 
 # Children must never consume the curl stream containing this program. Explicit

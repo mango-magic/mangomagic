@@ -114,7 +114,7 @@ Use the loop: **brief → produce → verify → review → repeat**. Save the o
 
 ## 5. Put good work on repeat
 
-Try a daily priorities brief, a weekly sales review or a delivery check. Fill [AUTOMATION_BRIEF.md](starter/04_Automations/AUTOMATION_BRIEF.md), test the prompt once, then create the actual scheduled task in the app. Verify its timezone, enabled status, input access and first result.
+Try a daily priorities brief, a weekly team review or a delivery check. Fill [AUTOMATION_BRIEF.md](starter/04_Automations/AUTOMATION_BRIEF.md), test the prompt once, then create the actual scheduled task in the app. Verify its timezone, enabled status, input access and first result.
 
 For jobs using local files, keep the computer on and the app running. Markdown files do not schedule themselves. [Official scheduling guide](https://learn.chatgpt.com/docs/automations).
 
@@ -122,9 +122,9 @@ Ask for notifications when something meaningful changes, a task fails or you nee
 
 ## 6. Optional: add MangoMagic 7.1
 
-**MangoMagic 7.1. Sharper outreach. Stronger follow-ups. Clearer next moves.**
+**MangoMagic 7.1. The business AI system for the modern worker.**
 
-ManyMangoes' B2B sales intelligence, with image input and adjustable thinking. Get it into your ChatGPT workspace through Ollama:
+ManyMangoes' business AI system for the modern worker, with image input, concise answers and adjustable thinking. Get it into your ChatGPT workspace through Ollama:
 
 ```bash
 bash -c 'f=$(mktemp) || exit; trap "rm -f \"$f\"" EXIT; curl -fsSL https://raw.githubusercontent.com/mango-magic/mangomagic/main/install.sh -o "$f" && bash "$f"'

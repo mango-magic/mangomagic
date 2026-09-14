@@ -2,7 +2,9 @@
 
 ![MangoMagic 7.1 by ManyMangoes](assets/mangomagic-banner.svg)
 
-**Data + AI + Automation.**
+**The business AI system for the modern worker.**
+
+Data + AI + Automation.
 
 [**Open setup →**](https://mango-magic.github.io/mangomagic/) · [Build my assistant](https://mango-magic.github.io/mangomagic/#context) · [Download kit](https://mango-magic.github.io/mangomagic/assets/AI-Operations-Starter.zip)
 

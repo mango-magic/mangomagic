@@ -65,7 +65,7 @@ Paths below are relative to the installed folder. Use the existing files rather 
 | --- | --- |
 | `START_HERE.md`, `AGENTS.md` | Onboarding and shared responsibilities, boundaries and working rules. |
 | `CURRENT_MISSION.md`, `project_tasks.json` | Root mission and workspace task evidence, including reserved owner review. |
-| `00_Command_Centre/BUSINESS_BRIEF.md` | Offer, buyers, priorities, approved claims and preferences. |
+| `00_Command_Centre/BUSINESS_BRIEF.md` | Role, team priorities, source files, standards and permissions. |
 | `00_Command_Centre/TASK_BRIEF.md`, `00_Command_Centre/HANDOFF.md` | Reusable task and delegation templates. |
 | `01_Data/SOURCE_REGISTER.csv` | Source IDs, locations, dates, authority and permitted use. |
 | `01_Data/source-documents/`, `01_Data/sanitised-conversations/` | Source library and privacy-safe conversation extracts. |
@@ -94,7 +94,7 @@ Use the loop: **brief → produce → verify → review → repeat**.
 
 ## 5. Automate a tested routine
 
-Try a **daily mission check** for new blockers or completed work, or a **weekly sales review** for changes in supported buyer patterns.
+Try a **daily mission check** for new blockers or completed work, or a **weekly team review** for changes in priorities, delivery and blockers.
 
 Fill the automation brief, test the routine manually, then create and verify the schedule in the app's scheduling UI. Check timezone, enabled status, input access and the first run's result. Local-file jobs need the computer on, the app running and the project available. **Files themselves do not schedule anything.**
 

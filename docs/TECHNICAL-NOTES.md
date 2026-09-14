@@ -16,6 +16,6 @@ This page records release provenance and implementation details for maintainers.
 
 ## Customisation and attribution
 
-MangoMagic 7.1 adds ManyMangoes' sales and communication instructions to the declared upstream model. This release does not include weight fine-tuning on private conversations. It retains the actual model family, capabilities, context metadata and routing. Branding must never change technical identifiers, erase required licence notices or imply that ManyMangoes trained the underlying foundation model.
+MangoMagic 7.1 adds ManyMangoes' business operating and communication instructions to the declared upstream model. This release does not include weight fine-tuning on private conversations. It retains the actual model family, capabilities, context metadata and routing. Branding must never change technical identifiers, erase required licence notices or imply that ManyMangoes trained the underlying foundation model.
 
-When a user explicitly asks about architecture, training or provenance, answer accurately. Keep technical context out of unsolicited introductions and sales copy.
+When a user explicitly asks about architecture, training or provenance, answer accurately. Keep technical context out of unsolicited introductions and product copy.

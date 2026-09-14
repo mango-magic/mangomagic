@@ -689,16 +689,16 @@ Check source-backed claims, calculations, audience and voice, working links, req
 
 Finish with links to the profile and first result, checks performed, material gaps and one next action. Continue authorised implementation rather than stopping at a plan. Then use the rollout card to choose three real first tasks, review the pilot and refine the profile. A suggested review date is not a scheduled reminder.
 OPERATIONS_DATA_5f7212b0b33aa79fa6f3f10db4082f884800d4092eb20bfe29d668e2e4f8061a
-    write_file 00_Command_Centre/BUSINESS_BRIEF.md 0 1 <<'OPERATIONS_DATA_4ca33cf299f430246be81f2e4be283fffdc7bcec527a7c879b707b44c37c6b18'
+    write_file 00_Command_Centre/BUSINESS_BRIEF.md 0 1 <<'OPERATIONS_DATA_15326ebc21bb49a33fd26998656de89dc4b549953559494b076d69a63165f7c6'
 # Business brief
 
 Fill this through a short onboarding conversation. Unknown is better than invented.
 
-- Business name and website: unknown
-- What we sell and approved pricing: unknown
-- Ideal customer and buying trigger: unknown
-- Customer problem and desired outcome: unknown
-- Differentiation with evidence: unknown
+- Business or team name and website: unknown
+- My role, department and responsibilities: unknown
+- Work this team owns and who uses its outputs: unknown
+- Recurring tasks and deliverables: unknown
+- Current problems and desired outcomes: unknown
 - Current top three priorities: unknown
 - Our tools and where authoritative data lives: unknown
 - Success measures and baseline: unknown
@@ -708,8 +708,10 @@ Fill this through a short onboarding conversation. Unknown is better than invent
 - Two examples of writing I like: unknown
 - Claims we can prove; claims we must not make: unknown
 
+For commercial work only: record the offer, approved pricing, customer context and evidence. Leave these out when they are not relevant to the role.
+
 Do not infer a personality type. Learn preferences from feedback and examples.
-OPERATIONS_DATA_4ca33cf299f430246be81f2e4be283fffdc7bcec527a7c879b707b44c37c6b18
+OPERATIONS_DATA_15326ebc21bb49a33fd26998656de89dc4b549953559494b076d69a63165f7c6
     write_file 00_Command_Centre/HANDOFF.md 0 1 <<'OPERATIONS_DATA_df4a815512891e4d85292dca5ad540d6c73b33df04e2c209989613f0475d58ec'
 # Handoff
 
@@ -1017,7 +1019,7 @@ OPERATIONS_DATA_03d8f776ad6f138bc6c426f5ce62d12a8d91a0ae45c90a4dac4a9321f22128e5
 
 Link each reviewed output with its project, version, date and verification notes. Keep drafts in their project folders. Label results ready for review, approved, or superseded. Owner review is a decision, not an automatic percentage increment.
 OPERATIONS_DATA_211b5bf170d996d87298f138462291d513b79b0a45aad3b1092642213c592699
-    write_file AGENTS.md 0 1 <<'OPERATIONS_DATA_49da4e4d9e076ad46c9d7f96c5ee5661da8a71fae091149a9794ad116eef20a9'
+    write_file AGENTS.md 0 1 <<'OPERATIONS_DATA_68264792e18853763f65cef8baa551bbc56a8e7f53c0bf87ff2888d7d64ed9b2'
 # AI Operations working agreement
 
 This is a ManyMangoes starter, adapted to the owner's business by onboarding.
@@ -1040,11 +1042,13 @@ This is a ManyMangoes starter, adapted to the owner's business by onboarding.
 
 ## Quality and communication
 - Lead with the result and next action. Use clear, direct language; adapt to the tone examples in the business brief without personality labels.
+- Default to the shortest complete answer. Prefer a useful visual, compact comparison or direct action over paragraphs. Put working detail in the deliverable and expand when requested or needed for accuracy.
+- Adapt to the person's role and department. Apply sales-specific guidance only to sales tasks.
 - Save useful outputs as files. Verify calculations, links and key claims with appropriate checks. Keep original data intact.
 - Report blockers with the exact missing input and any independent work completed. Distinguish completed work from drafts and planned work.
 - Sending messages, publishing, spending money and changing access require the owner's relevant authorisation. Once authorised, proceed within that scope. Do not change global approval/security settings during setup.
 - Do not put credentials, private customer data or internal business files in the public starter repository.
-OPERATIONS_DATA_49da4e4d9e076ad46c9d7f96c5ee5661da8a71fae091149a9794ad116eef20a9
+OPERATIONS_DATA_68264792e18853763f65cef8baa551bbc56a8e7f53c0bf87ff2888d7d64ed9b2
     write_file CURRENT_MISSION.md 0 1 <<'OPERATIONS_DATA_6fe856f6e835e9723a330cf2eba8417a42d810ef27af37bbcf6681cf98c9e0fc'
 # Current mission
 
