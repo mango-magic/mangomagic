@@ -87,7 +87,11 @@ if TOOL == "ollama":
         EVENT["phase"] = "inference"
         if SCENARIO.get("inference_failure"):
             finish(43, "READY", "MOCK_INFERENCE_FAILURE")
-        finish(stdout="Unexpected reply" if SCENARIO.get("inference_bad_reply") else "READY")
+        if SCENARIO.get("inference_bad_reply"):
+            finish(stdout="Unexpected reply")
+        if SCENARIO.get("inference_extra_reply"):
+            finish(stdout="READY. MangoMagic is available.")
+        finish(stdout="READY")
     unexpected("ollama operation")
 
 if TOOL == "curl":

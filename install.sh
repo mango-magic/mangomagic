@@ -354,11 +354,10 @@ APPLESCRIPT
     local inference_response=''
     note 'Checking Ollama cloud access with one short test response.'
     if inference_response=$("$OLLAMA_BIN" run "$MODEL" --think=low --hidethinking 'Reply only READY' </dev/null); then
-        inference_response=${inference_response//$'\r'/}
-        inference_response=${inference_response//$'\n'/}
-        inference_response=${inference_response//$'\t'/}
-        inference_response=${inference_response// /}
-        [ "$inference_response" = 'READY' ] || fail 'Ollama did not return the expected test response. Check model access and rerun.'
+        if ! printf '%s' "$inference_response" | tr '[:upper:]' '[:lower:]' | grep -q 'ready'; then
+            printf '\n  Ollama replied: %s\n' "${inference_response:-<empty response>}" >&2
+            fail 'Ollama did not return READY. Check model access, sign in if prompted, then rerun.'
+        fi
         note 'Ollama cloud access and a Low-thinking response are verified.'
     else
         fail 'Ollama could not run the model. Use "ollama signin" if authentication is requested; resolve any cloud access or usage-limit error, then rerun.' "$?"

@@ -209,6 +209,11 @@ class InstallerIntegrationTests(unittest.TestCase):
         self.assertEqual([], result.phase("registration"))
         self.assert_no_restart(result)
 
+    def test_inference_reply_with_extra_text_still_configures(self):
+        result = self.run_installer(scenario={"inference_extra_reply": True})
+        self.assertEqual(0, result.status, result.output)
+        self.assert_configured(result)
+
     def test_successful_restart_quits_then_reopens_exact_app(self):
         result = self.run_installer()
         self.assertEqual(0, result.status, result.output)
