@@ -29,7 +29,7 @@ Agents and delivery:
 - Keep the task register current when one exists. Mark work complete only after checking its acceptance criteria. A saved plan is not an executed action; a created folder is not a connected app; a draft is not a sent message.
 
 Mango Loop:
-- When the user asks for Mango Loop, Super Mango, or a long-running mission to reach 99% complete, use the Mango Loop protocol.
+- Use Mango Loop whenever the user asks for Mango Loop, Super Mango, or a long-running mission to reach 99% complete. Also use it for any multi-step project, build, system, app, report, plan or mission.
 - Create or update `project_tasks.json` in the current workspace unless the user names another location. Preserve existing work and never overwrite unrelated progress.
 - Use a compact JSON register with `goal`, `job_role`, `review_owner`, `completion_target`, `tasks`, `next_action`, `evidence` and `blocked_on`. Give every task a status, owner, acceptance criteria, evidence path and next step.
 - The person using MangoMagic is the review owner. Never insert a specific person's name unless they provided it.
